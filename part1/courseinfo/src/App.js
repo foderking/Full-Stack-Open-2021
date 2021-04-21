@@ -1,23 +1,21 @@
 import React from 'react'
 
 const Header = (props) => (
-    <>
-      <h1>{props.course}</h1>
-    </>
+      <h1>
+        {props.course}
+      </h1>
 )
 
 const Total = (props) => (
-  <div>
     <p>
     Number of exercises: {props.ex1 + props.ex2 + props.ex3}
     </p>
-  </div>
 )
 
 const Part = (props) => (
-  <>
-    <p>{props.part}: {props.exercise}</p>
-  </>
+    <p>
+      {props.part}: {props.exercise}
+    </p>
 )
 
 const Content = (props) => (
@@ -39,29 +37,34 @@ const Content = (props) => (
 
 const App = () => {
   const course = 'Half Stack application development'
-  const parts = [
-    '', 
-    'Fundementals of React', 
-    'Using props to pass data', 
-    'States of a component'
-    ]
-  const exercises = [NaN, 10, 7, 14]
+  const part1 = {
+    name: 'Fundementals of React',
+    exercises: 10
+  }
+  const part2 = {
+    name: 'Using props to pass data',
+    exercises: 7
+  }
+  const part3 = {
+    name: 'States of a component',
+    exercises: 14
+  }    
 
   return (
     <div>
       <Header course={course} />
       <Content 
-        part1={parts[1]} 
-        part2={parts[2]} 
-        part3={parts[3]} 
-        exercises1={exercises[1]} 
-        exercises2={exercises[2]} 
-        exercises3={exercises[3]} 
+        part1={part1.name} 
+        part2={part2.name} 
+        part3={part3.name} 
+        exercises1={part1.exercises} 
+        exercises2={part2.exercises} 
+        exercises3={part3.exercises} 
       />
       <Total 
-        ex1={exercises[1]} 
-        ex2={exercises[2]} 
-        ex3={exercises[3]} 
+        ex1={part1.exercises} 
+        ex2={part2.exercises} 
+        ex3={part3.exercises} 
       />
     </div>
   )
