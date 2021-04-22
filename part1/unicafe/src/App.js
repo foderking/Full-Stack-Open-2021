@@ -27,7 +27,11 @@ const App = () => {
         click={() => incRev('bad')} 
         value='bad' 
       />
-      <State review={review} />
+      <Statistics 
+        good={review.good}
+        neutral={review.neutral}
+        bad={review.bad}
+      />
     </div>
     )
 }
@@ -37,23 +41,17 @@ const Button = ({value, click}) =>
       {value}
     </button>
 
-const State = ({review}) => {
-  const good = review.good
-  const neutral = review.neutral
-  const bad = review.bad
-  const total = good + neutral + bad
-  const positive = good / total * 100
-  const average = (good - bad) / total
-
+const Statistics = (props) => {
+  const total = props.good + props.neutral + props.bad
   return (
     <div>
       <h2>statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
+      <p>good {props.good}</p>
+      <p>neutral {props.neutral}</p>
+      <p>bad {props.bad}</p>
       <p>all {total}</p>
-      <p>average {average}</p>
-      <p>positive {positive}%</p>
+      <p>average { (props.good - props.bad) / total }</p>
+      <p>positive { props.good / total * 100 }%</p>
     </div>
     )
 }
