@@ -49,32 +49,37 @@ const Statistics = (props) => {
     return <p>No feedback given</p>
   }
   return (
-    <div>
-      <Statistic 
-        text="good" value={props.good}
-      />
-      <Statistic 
-        text="neutral" value={props.neutral}
-      />      
-      <Statistic 
-        text="bad" value={props.bad}
-      />
-      <Statistic 
-        text="all" value={total}
-      />
-      <Statistic 
-        text="average" value={(props.good - props.bad) / total}
-      />  
-      <Statistic 
-        text="positive" value={props.good / total * 100}
-      />
-    </div>  
+    <table>
+      <tbody>
+        <Statistic 
+          text="good" value={props.good}
+        />
+        <Statistic 
+          text="neutral" value={props.neutral}
+        />      
+        <Statistic 
+          text="bad" value={props.bad}
+        />
+        <Statistic 
+          text="all" value={total}
+        />
+        <Statistic 
+          text="average" value={(props.good - props.bad) / total}
+        />  
+        <Statistic 
+          text="positive" value={props.good / total * 100}
+        />
+      </tbody>  
+    </table>
   )
 }
 
 const Statistic = (props) => {
   return (
-    <p>{props.text} {props.value}</p>
+    <tr>
+    <td>{props.text} </td> 
+    <td>{props.value} </td>
+    </tr>
     )
 }
 export default App;
