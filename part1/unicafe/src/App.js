@@ -16,15 +16,15 @@ const App = () => {
     <div>
       <h2>give feedback</h2>
       <Button 
-        click={() => incRev('good')} 
+        click={ () => incRev('good') } 
         value='good' 
       />
       <Button 
-        click={() => incRev('neutral')} 
+        click={ () => incRev('neutral') } 
         value='neutral' 
       />
       <Button 
-        click={() => incRev('bad')} 
+        click={ () => incRev('bad') } 
         value='bad' 
       />
       <h2>statistics</h2>
@@ -32,7 +32,7 @@ const App = () => {
         good={review.good}
         neutral={review.neutral}
         bad={review.bad}
-      />
+      />              
     </div>
     )
 }
@@ -44,20 +44,37 @@ const Button = ({value, click}) =>
 
 const Statistics = (props) => {
   const total = props.good + props.neutral + props.bad
+
   if (total === 0) {
-    return (
-      <p>No feedback given</p>
-      )
+    return <p>No feedback given</p>
   }
   return (
     <div>
-      <p>good {props.good}</p>
-      <p>neutral {props.neutral}</p>
-      <p>bad {props.bad}</p>
-      <p>all {total}</p>
-      <p>average { (props.good - props.bad) / total }</p>
-      <p>positive { props.good / total * 100 }%</p>
-    </div>
+      <Statistic 
+        text="good" value={props.good}
+      />
+      <Statistic 
+        text="neutral" value={props.neutral}
+      />      
+      <Statistic 
+        text="bad" value={props.bad}
+      />
+      <Statistic 
+        text="all" value={total}
+      />
+      <Statistic 
+        text="average" value={(props.good - props.bad) / total}
+      />  
+      <Statistic 
+        text="positive" value={props.good / total * 100}
+      />
+    </div>  
+  )
+}
+
+const Statistic = (props) => {
+  return (
+    <p>{props.text} {props.value}</p>
     )
 }
 export default App;
