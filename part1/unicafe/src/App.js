@@ -14,7 +14,7 @@ const App = () => {
   }  
   return (
     <div>
-      <h1>give feedback</h1>
+      <h2>give feedback</h2>
       <Button 
         click={() => incRev('good')} 
         value='good' 
@@ -27,6 +27,7 @@ const App = () => {
         click={() => incRev('bad')} 
         value='bad' 
       />
+      <h2>statistics</h2>
       <Statistics 
         good={review.good}
         neutral={review.neutral}
@@ -43,9 +44,13 @@ const Button = ({value, click}) =>
 
 const Statistics = (props) => {
   const total = props.good + props.neutral + props.bad
+  if (total === 0) {
+    return (
+      <p>No feedback given</p>
+      )
+  }
   return (
     <div>
-      <h2>statistics</h2>
       <p>good {props.good}</p>
       <p>neutral {props.neutral}</p>
       <p>bad {props.bad}</p>
