@@ -31,7 +31,6 @@ const Content = (props) => {
     exercise={value.exercises} 
     key={props.parts.indexOf(value)}
   />)
-
   return (
     <div>
       {element}
@@ -51,7 +50,6 @@ const App = () => {
     name: 'States of a component',
     exercises: 14
   } ]   
-
   return (
     <div>
       <Header course={course} />
