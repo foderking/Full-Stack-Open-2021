@@ -51,12 +51,14 @@ const Header = (props) => (
       </h1>
 )
 
-const Total = (props) => {
-  let total = 0
+const Total = ({parts}) => {
+  const reducer = (accul, curr) => accul + curr
 
-  props.parts.forEach( value => {
-    total += value.exercises
-  } )
+  const total = parts.map(
+    part => part.exercises
+  ).reduce(reducer)
+
+  console.log(total)
   return (
     <p>
     total of {total} exercises
