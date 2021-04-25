@@ -1,21 +1,23 @@
 import React from 'react'
 
+const iDs = []
+
 const Course = ({course}) => {
-  const container = course.map(each => <Container key={each.id} course={each} />)
+  const container = course.map(
+    each => <Container key={each.id} course={each} />
+  )
   return (
     <div>
       <h1>Web Development Curriculum</h1>
       {container}
-
     </div>
   )  
 }
-
 const Content = ({parts}) => {
   const element = parts.map( value => <Part 
     part={value.name} 
     exercise={value.exercises} 
-    key={parts.indexOf(value)}
+    key={uniqueId(1000, iDs)}
   />)
   return (
     <div>
@@ -23,8 +25,8 @@ const Content = ({parts}) => {
     </div>
     )
 }
-
 const Container = ({course}) => {
+  
   return (
     <div>
       <Header course={course.name} />
@@ -33,7 +35,6 @@ const Container = ({course}) => {
     </div>
     )
 }
-
 const Total = ({parts}) => {
   const reducer = (accul, curr) => accul + curr
 
@@ -57,5 +58,17 @@ const Part = (props) => (
       {props.part}: {props.exercise}
     </p>
 )
+
+const uniqueId = (range, a) => {
+  for (let i = 0 ; ; i++) {
+    let rand = Math.floor(Math.random() * range)
+
+    if (!a.includes(rand)) {
+      a.push(rand)
+      console.log(i)
+      return rand
+    }
+  }
+}
 
 export default Course
