@@ -7,9 +7,14 @@ const App = () => {
   const [state, setState] = useState([])
   const [query, setQuery] = useState('')
   const [country, setCountry] = useState({name: ''})
-  const [weather, setWeather] = useState({current:{
-    temperature:0, wind_speed: 0, wind_dir: "NULL", weather_icons: ['']
-  }})
+  const [weather, setWeather] = useState({
+    current:{
+      temperature:0, 
+      wind_speed: 0, 
+      wind_dir: "NULL", 
+      weather_icons: ['']
+    }
+  })
   console.log('load..')
   // finds names in phonebook that start with name stored in the "filter" state
   const search = (value) => {
@@ -45,8 +50,7 @@ const App = () => {
 }
 
 const ViewCountries = ({data, search, changeCountry, country, weather, changeWeather}) => {
-  // filters data to only names that match input
-  const filteredList = data.filter(
+  const filteredList = data.filter(     // filters data to only names that match input
     each => search(each)
   )
 
@@ -117,9 +121,7 @@ const Filter = (props) =>
     </div>
 
 // Displays information for a single country
-const DisplayCountry = (props) => {
-  // console.log(props)
-  return (
+const DisplayCountry = (props) => 
     <div>
       <h2>{props.name}</h2>
       <p>Capital {props.capital}</p>
@@ -139,10 +141,10 @@ const DisplayCountry = (props) => {
       <h3>Weather in {props.capital}</h3>
       <Weather city={props.name} weather={props.weather} change={props.changeWeather} />
     </div>
-    )
-}
+
 
 const Weather = ({city, weather, change}) => {
+  // Using weatherstack API
   const url = `http://api.weatherstack.com/current?access_key=${YOUR_ACCESS_KEY}&query=${city}`
 
   useEffect(() => {
