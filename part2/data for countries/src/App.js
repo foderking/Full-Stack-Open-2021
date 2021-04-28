@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const YOUR_ACCESS_KEY = process.env.REACT_APP_API_KEY
 
 const App = () => {
   const [state, setState] = useState([])
   const [query, setQuery] = useState('')
   const [country, setCountry] = useState({name: ''})
-
+  const [weather, setWeather] = useState({current:{
+    temperature:0, wind_speed: 0, wind_dir: "NULL", weather_icons: ['']
+  }})
+  console.log('load..')
   // finds names in phonebook that start with name stored in the "filter" state
   const search = (value) => {
     return value.name.toLowerCase().startsWith(query.toLowerCase())
@@ -32,12 +36,15 @@ const App = () => {
         search={search} 
         data={state} 
         changeCountry={setCountry} 
-        country={country}/>
+        country={country}
+        weather={weather}
+        changeWeather={setWeather}
+      />
     </div>
   )
 }
 
-const ViewCountries = ({data, search, changeCountry, country}) => {
+const ViewCountries = ({data, search, changeCountry, country, weather, changeWeather}) => {
   // filters data to only names that match input
   const filteredList = data.filter(
     each => search(each)
@@ -60,6 +67,8 @@ const ViewCountries = ({data, search, changeCountry, country}) => {
         population={filteredList[0].population}
         laguages={langList}
         flag={filteredList[0].flag}
+        weather={weather}
+        changeWeather={changeWeather}
       />
       )
   } else if (country.name !== ''){        // handles when the "show" button is clicked
@@ -72,6 +81,8 @@ const ViewCountries = ({data, search, changeCountry, country}) => {
           each => each.name
         )}
         flag={country.flag}
+        weather={weather}
+        changeWeather={changeWeather}
       />
       )
   } else {                              // handles when there are between 1 - 10 search results
@@ -107,6 +118,7 @@ const Filter = (props) =>
 
 // Displays information for a single country
 const DisplayCountry = (props) => {
+  // console.log(props)
   return (
     <div>
       <h2>{props.name}</h2>
@@ -124,9 +136,30 @@ const DisplayCountry = (props) => {
         width="500" 
         height="300" 
       />
+      <h3>Weather in {props.capital}</h3>
+      <Weather city={props.name} weather={props.weather} change={props.changeWeather} />
     </div>
     )
 }
 
+const Weather = ({city, weather, change}) => {
+  const url = `http://api.weatherstack.com/current?access_key=${YOUR_ACCESS_KEY}&query=${city}`
+
+  useEffect(() => {
+    axios
+      .get(url)
+      .then(response => {
+        change(response.data)
+      })
+  }, [url, change])
+
+  return (
+    <div>
+      <p><strong>Temperature:</strong> {weather.current.temperature} Celsius</p>
+      <img src={weather.current.weather_icons[0]} alt={city} />
+      <p><strong>Wind:</strong> {weather.current.wind_speed} mph direction {weather.current.wind_dir}</p>
+    </div>
+    )
+}
 
 export default App
