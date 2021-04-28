@@ -1,18 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]) 
+  const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [no, setNo] = useState('')
   const [filter, setFilter] = useState('')
   const stateData = [['Name', newName, setNewName], ['Number', no, setNo]]
 
+  const hook = () => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }
+  useEffect(hook, [])
+
   const search = (value) => {
+    // finds names in phonebook that start with name stored in the"filter" state
     return value.name.toLowerCase().startsWith(filter.toLowerCase())
   }
   const submitNew = (event) => {
