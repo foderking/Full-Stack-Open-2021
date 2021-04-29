@@ -1,34 +1,51 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import serve from './services/persons'
 
 const App = () => {
+  console.log('load...')
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [no, setNo] = useState('')
   const [filter, setFilter] = useState('')
   const stateData = [['Name', newName, setNewName], ['Number', no, setNo]]
 
-  const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
-  }
-  useEffect(hook, [])
+  useEffect(
+    () => {
+      serve.getPersons()
+        .then(personData => setPersons(personData))
+    },
+  [])
 
   const search = (value) => {
-    // finds names in phonebook that start with name stored in the"filter" state
-    return value.name.toLowerCase().startsWith(filter.toLowerCase())
+    return value.name.toLowerCase().startsWith(filter.toLowerCase())      // finds names in phonebook that start with name stored in the"filter" state
   }
+  const buttonSubmit = (id) => {
+    console.log(`id: ${id} deleted`)
+    serve.deletePerson(id)
+      .then(response => {
+        serve.getPersons()
+          .then(personData => setPersons(personData))        
+        // setPersons(response)
+      })
+  }
+
   const submitNew = (event) => {
     event.preventDefault()
-    const newPers = {name: newName,
-                     number: no }
+
+    const newPers = {
+      name: newName,
+      number: no 
+    }
+
     if (persons.filter(each => each.name === newName).length) {
         window.alert(`${newName} is already added to Phonebook`)
     } else {
-        setPersons(persons.concat(newPers))
+        serve.addPerson(newPers)
+          .then(response => {
+            console.log(response)
+            setPersons(persons.concat(response))
+
+          })
     }
   }
   return (
@@ -38,7 +55,7 @@ const App = () => {
       <h2>Add a new</h2>    
       <AddPerson data={stateData} submit={submitNew} />
       <h2>Numbers</h2>
-      <ShowPersons data={persons} search={search} />
+      <ShowPersons data={persons} search={search} button={buttonSubmit}/>
     </div>
   )
 }
@@ -75,20 +92,37 @@ const Input = (props) =>
   </div>
 
 
-const ShowPersons = ({data, search}) => {
+const ShowPersons = ({data, search, button}) => {
   const filteredList = data.filter(each => search(each))
   return (
     <div>
     {
       filteredList.map(
-        each => <EachPerson key={each.name} name={each.name} number={each.number} />
+        each => 
+        <EachPerson 
+          key={each.id} 
+          id = {each.id}
+          name={each.name} 
+          number={each.number} 
+          button={button}
+        />
       )
     }
     </div>    
   )
 }
 
-const EachPerson = ({name, number}) => <p>{name} {number}</p>
+const EachPerson = ({name, number, id, button}) => {
+  // console.log(this.props)
+  return (
+    <div>
+      {name} {number}
+      <button onClick={() => button(id)}>
+        delete
+      </button>
+    </div>
+  )
+}
 
 
 export default App
