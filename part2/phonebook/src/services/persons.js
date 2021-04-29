@@ -17,5 +17,10 @@ const deletePerson = (id) => {
 	return request.then(response => response.data)
 }
 
-const object = {getPersons, addPerson, deletePerson}
+const changePerson = (id, data) => {
+	const request = axios.put(`${base}/${id}`, data)
+	return request.then(response => response.data)
+}
+
+const object ={ getPersons, addPerson, deletePerson, changePerson}
 export default object

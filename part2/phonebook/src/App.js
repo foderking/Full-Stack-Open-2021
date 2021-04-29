@@ -19,14 +19,15 @@ const App = () => {
   const search = (value) => {
     return value.name.toLowerCase().startsWith(filter.toLowerCase())      // finds names in phonebook that start with name stored in the"filter" state
   }
-  const buttonSubmit = (id) => {
-    console.log(`id: ${id} deleted`)
-    serve.deletePerson(id)
-      .then(response => {
-        serve.getPersons()
-          .then(personData => setPersons(personData))        
-        // setPersons(response)
-      })
+  const buttonSubmit = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      console.log(`id: ${id} deleted`)
+      serve.deletePerson(id)
+        .then(response => {
+          serve.getPersons()
+            .then(personData => setPersons(personData))        
+        })
+    }
   }
 
   const submitNew = (event) => {
@@ -36,13 +37,20 @@ const App = () => {
       name: newName,
       number: no 
     }
-
     if (persons.filter(each => each.name === newName).length) {
-        window.alert(`${newName} is already added to Phonebook`)
+      if(window.confirm(`${newName} is already added to Phonebook, replace the old number with a new one?`)) {
+        // console.log(newName, no)
+        const id_ = persons.find(each => each.name === newName).id
+        serve.changePerson(id_, newPers)
+          .then(response => {
+            setPersons(persons.map(each => each.id === id_ ? response : each))
+          })
+
+      }
+
     } else {
         serve.addPerson(newPers)
           .then(response => {
-            console.log(response)
             setPersons(persons.concat(response))
 
           })
@@ -62,12 +70,13 @@ const App = () => {
 
 const Filter = (props) => 
   <div>
-    Filter shown with <input 
+    Filter shown with 
+    <input 
       value={props.value} 
       onChange={
         (event) => props.search(event.target.value)
       }
-  />
+    />
   </div>  
 
 
@@ -75,7 +84,13 @@ const AddPerson = ({data, submit}) =>
   <div>
     <form onSubmit={submit}>
       {data.map(
-        each => <Input key={each[0]} text={each[0]} value={each[1]} handler={each[2]} />
+        each => 
+        <Input 
+          key={each[0]} 
+          text={each[0]} 
+          value={each[1]} 
+          handler={each[2]} 
+        />
       )}
       <button type="submit" >add</button>
     </form>  
@@ -83,7 +98,8 @@ const AddPerson = ({data, submit}) =>
 
 const Input = (props) => 
   <div>
-    {props.text}: <input 
+    {props.text}: 
+    <input 
       value={props.value} 
       onChange={
         (event) => props.handler(event.target.value)
@@ -113,11 +129,10 @@ const ShowPersons = ({data, search, button}) => {
 }
 
 const EachPerson = ({name, number, id, button}) => {
-  // console.log(this.props)
   return (
     <div>
       {name} {number}
-      <button onClick={() => button(id)}>
+      <button onClick={() => button(id, name)}>
         delete
       </button>
     </div>
