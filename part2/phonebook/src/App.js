@@ -10,27 +10,20 @@ const App = () => {
   const [error, setError] = useState(false)
   const [classtype, setType] = useState('')
 
-  useEffect(
-    () => {
-      serve.getPersons()
-        .then(personData => setPersons(personData))
-    },
-  [])
-
   const search = (value) => {
-    return value.name.toLowerCase().startsWith(filter.toLowerCase())      // finds names in phonebook that start with name stored in the"filter" state
+    return value.name.toLowerCase().startsWith(filter.toLowerCase())      // finds names in phonebook that start with name stored in the "filter" state
   }
 
-  const notify = (message, type) => {
+  const notify = (message, type) => {           // Function for the notification commponent
     setError(message)
     setType(type)
-    console.log(type==="success")
-    setTimeout(() => setError(false), type === "success" ? 3000 : 6000)
+    setTimeout(() => setError(false), 4000 )
   }
 
-  const buttonSubmit = (id, name) => {
+  const buttonSubmit = (id, name) => {              // Deletes entry specified by "id"
     if (window.confirm(`Delete ${name}?`)) {
-      console.log(`id: ${id} deleted`)
+      console.log(`id ${id} deleted`)
+
       serve.deletePerson(id)
         .then(response => {
           serve.getPersons()
@@ -45,6 +38,7 @@ const App = () => {
 
   const submitNew = (event) => {
     event.preventDefault()
+
     const newPers = {
       name: newName,
       number: no 
@@ -52,29 +46,36 @@ const App = () => {
 
     if (persons.filter(each => each.name === newName).length) {           // Updates phonebook
       if(window.confirm(`${newName} is already added to Phonebook, replace the old number with a new one?`)) {
-        const id_ = persons.find(each => each.name === newName).id
+        const id_ = persons.find(each => each.name === newName).id     // id of entry to be updated
+
         serve.changePerson(id_, newPers)
           .then(response => {
             setPersons(persons.map(each => each.id === id_ ? response : each))
+            notify(`Updated ${newName}`, "success")
           })
           .catch( error => {
             notify(`${error}: Could not update ${newName}`, "error")
           })
-        notify(`Updated ${newName}`, "success")
       } 
     } else {                    // Adds new entry for phonebook
         serve.addPerson(newPers)
           .then(response => {
             setPersons(persons.concat(response))
+            notify(`Added ${newName}`, "success")
           })
           .catch(error => {
             notify(`${error}: Could not add ${newName}`, "error")
           })
-
-        notify(`Added ${newName}`, "success")
     }
-
   }
+
+  useEffect(
+    () => {
+      serve.getPersons()
+        .then(personData => setPersons(personData))
+    },
+  [])
+
   return (
     <div>
       <h2>Phonebook</h2>
