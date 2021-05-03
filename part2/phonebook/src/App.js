@@ -30,6 +30,7 @@ const App = () => {
             .then(personData => setPersons(personData))        
         })
         .catch(error => {
+          console.log(error.response.data)
           notify(`${error}: Could not delete ${newName}`, "error")
         })
     }
@@ -55,15 +56,18 @@ const App = () => {
           })
           .catch( error => {
             notify(`${error}: Could not update ${newName}`, "error")
+            console.log(error.response.data)
           })
       } 
     } else {                    // Adds new entry for phonebook
         serve.addPerson(newPers)
           .then(response => {
+            console.log("POST:", response)
             setPersons(persons.concat(response))
             notify(`Added ${newName}`, "success")
           })
           .catch(error => {
+            console.log(error.response.data)
             notify(`${error}: Could not add ${newName}`, "error")
           })
     }
