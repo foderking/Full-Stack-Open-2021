@@ -118,3 +118,10 @@ describe('Maximum likes', () => {
     })
   })
 })
+
+describe('most blogs', () => {
+  test('random test', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual({"author": "Robert C. Martin", "blogs": 3})
+  })
+})
