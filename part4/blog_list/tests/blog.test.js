@@ -89,9 +89,9 @@ describe('deletion of a blog', () => {
   })
 })
 
-test('updates blogs', async() => {
+// test('updates blogs', async() => {
 		
-})
+// })
 
 
 test('should return correct amount of blog posts', async(done) => {
