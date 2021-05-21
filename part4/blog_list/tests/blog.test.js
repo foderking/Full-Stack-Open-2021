@@ -73,7 +73,7 @@ test('blogs without the title, url properties should return 400 error', async() 
 
 })
 
-describe('deletion of a note', () => {
+describe('deletion of a blog', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const notesAtStart = await api.get('/api/blogs')
     const noteToDelete =  notesAtStart.body[0]
@@ -88,6 +88,11 @@ describe('deletion of a note', () => {
     )
   })
 })
+
+test('updates blogs', async() => {
+		
+})
+
 
 test('should return correct amount of blog posts', async(done) => {
 	const response = await api.get('/api/blogs')
