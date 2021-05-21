@@ -15,11 +15,16 @@ server.get('/', (request, response) => {
 
 server.post('/api/blogs', async(request, response) => {
   let blog = request.body
-  blog = blog.likes ? blog : {...blog, likes: 0}
-  
-  blog = new Blog(blog)
-  result = await blog.save()
-  response.status(201).json(result)
+  if ( !blog.title | !blog.url ) {
+    response.status(400).end()
+  }
+  else {
+    blog = blog.likes ? blog : {...blog, likes: 0}
+
+    blog = new Blog(blog)
+    result = await blog.save()
+    response.status(201).json(result)
+  }
 })
 
 module.exports = server

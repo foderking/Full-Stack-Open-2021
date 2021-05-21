@@ -87,6 +87,29 @@ test('object without like should default to 0', async() => {
 
 })
 
+test('blogs without the title, url properties should return 400 error', async() => {
+	const noTitle = {	"author": "random", "url": "/google.com" }
+	const noUrl = {
+	  "title": "wahala",
+	  "author": "random"
+	}
+	const none = {"author": "random"}
+
+  await api
+    .post('/api/blogs')
+    .send(noTitle)
+    .expect(400)
+  await api
+    .post('/api/blogs')
+    .send(noUrl)
+    .expect(400)  
+  await api
+    .post('/api/blogs')
+    .send(none)
+    .expect(400)
+
+})
+
 test('should return correct amount of blog posts', async(done) => {
 	const response = await api.get('/api/blogs')
 	expect(response.body).toHaveLength(2)
