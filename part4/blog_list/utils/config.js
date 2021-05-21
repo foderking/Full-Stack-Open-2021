@@ -1,8 +1,12 @@
-const PORT = 3003
-const mongoUrl = 'mongodb+srv://ope:ope@cluster0.gvmqb.mongodb.net/blog_list?retryWrites=true&w=majority'
+require('dotenv').config()
 
+const PORT = process.env.PORT
 
-module.exports = { 
-	PORT,
-	mongoUrl
+const mongoUrl = process.env.NODE_ENV === 'test' 
+  ? process.env.TEST_MONGODB_URI
+  : process.env.MONGODB_URI
+
+module.exports = {
+  mongoUrl,
+  PORT
 }
