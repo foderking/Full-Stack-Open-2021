@@ -42,11 +42,36 @@ test('id should be defined', async() => {
 	expect(response.body[1].id).toBeDefined()
 })
 
+test('http post works correctly', async () => {
+  const newBlog = 	{
+	  title: 'shhudo',
+	  author: 'ah',
+	  url: '/ri',
+	  likes: 9
+	}
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  // const contents = response.body.map(r => r.content)
+
+  expect(response.body).toHaveLength(initial.length + 1)
+  // expect(contents).toContain(
+  //   'async/await simplifies making async calls'
+  // )
+})
+
 test('should return correct amount of blog posts', async(done) => {
 	const response = await api.get('/api/blogs')
 	expect(response.body).toHaveLength(2)
 	done()
 })
+
 
 
 afterAll(() => {
