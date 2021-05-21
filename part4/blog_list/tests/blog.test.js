@@ -64,6 +64,7 @@ test('http post works correctly', async () => {
   // expect(contents).toContain(
   //   'async/await simplifies making async calls'
   // )
+  //
 })
 
 test('should return correct amount of blog posts', async(done) => {
