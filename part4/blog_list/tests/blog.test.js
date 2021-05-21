@@ -36,9 +36,16 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('should return correct amount of blog posts', async() => {
+test('id should be defined', async() => {
+	const response = await api.get('/api/blogs')
+	expect(response.body[0].id).toBeDefined()
+	expect(response.body[1].id).toBeDefined()
+})
+
+test('should return correct amount of blog posts', async(done) => {
 	const response = await api.get('/api/blogs')
 	expect(response.body).toHaveLength(2)
+	done()
 })
 
 
