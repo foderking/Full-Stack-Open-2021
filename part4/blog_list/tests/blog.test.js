@@ -67,6 +67,26 @@ test('http post works correctly', async () => {
   //
 })
 
+test('object without like should default to 0', async() => {
+	const temp = {
+	  "title": "wahala",
+	  "author": "random",
+	  "url": "/google.com"
+	}
+  await api
+    .post('/api/blogs')
+    .send(temp)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  let response = await api.get('/api/blogs')
+  response = response.body
+
+  expect(response.find(each => each.title === 'wahala').likes).toBe(0)
+  expect(response).toHaveLength(3)
+
+})
+
 test('should return correct amount of blog posts', async(done) => {
 	const response = await api.get('/api/blogs')
 	expect(response.body).toHaveLength(2)

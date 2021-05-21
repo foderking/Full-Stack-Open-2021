@@ -14,8 +14,10 @@ server.get('/', (request, response) => {
 })
 
 server.post('/api/blogs', async(request, response) => {
-  const blog = new Blog(request.body)
-
+  let blog = request.body
+  blog = blog.likes ? blog : {...blog, likes: 0}
+  
+  blog = new Blog(blog)
   result = await blog.save()
   response.status(201).json(result)
 })
