@@ -12,7 +12,7 @@ const User = require('../models/user')
 
 beforeEach(async() => {
 	await blog.deleteMany({})
-
+  // jest.setTimeout(10000);
 	for (let each of helper.initialNotes) {
 		let temp = new blog(each)
 		await temp.save()

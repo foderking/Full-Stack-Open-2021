@@ -1,5 +1,6 @@
 const server = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 
 server.get('/', (request, response) => {
@@ -13,18 +14,28 @@ server.get('/api/blogs', async(request, response) => {
 
 server.post('/api/blogs', async(request, response) => {
   let blog = request.body
-  if ( !blog.title | !blog.url ) {
-    response.status(400).end()
-  }
-  else {
-    blog = blog.likes ? blog : {...blog, likes: 0}
 
-    blog = new Blog(blog)
-    result = await blog.save()
-    response.status(201).json(result)
+  const user = await User.findById(blog.userId)
+
+  if (!user) {
+    return response.status(400).json({
+      "error": "invalid user id"
+    })
   }
+
+  blog = blog.likes ? {...blog, user: user._id }: {...blog, likes: 0, user: user._id }
+
+  blog = new Blog(blog)
+  result = await blog.save()
+
+  user.blogs =  user.blogs.concat(result.id)
+
+  await user.save()
+  response.status(201).json(result)
 })
 
+
+// to be done later
 server.delete('/api/blogs/:id', async(request, response) => {
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
