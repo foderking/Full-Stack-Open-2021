@@ -8,9 +8,12 @@ const blog = require('../models/blog')
 
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
+const { JsonWebTokenError } = require('jsonwebtoken')
 
 
 describe('only valid blogs are created', () => {
+  let toke // token
+
   beforeEach(async() => {
     // blog initialization
   	await blog.deleteMany({})
@@ -19,7 +22,7 @@ describe('only valid blogs are created', () => {
     const blog2 = new blog(helper.blogs.second)
     await blog1.save()
     await blog2.save()
-/*
+
     //  user initialization
     await User.deleteMany({})
     
@@ -28,13 +31,19 @@ describe('only valid blogs are created', () => {
     const user = await new User(initial)
 
     await user.save()    
-*/    // jest.setTimeout(10000);
+    
+    // login user
+    const result = await api
+      .post('/api/login')
+      .send({username: user.username, password: 'sekret' })
+
+    toke = result.body.token
+    jest.setTimeout(10000)
   })
   
   test('should return correct amount of blog posts', async() => {
   	const response = await api.get('/api/blogs')
   	expect(response.body).toHaveLength(2)
-  	// done()
   })
 
   test('blogs are returned as json', async () => {
@@ -52,12 +61,11 @@ describe('only valid blogs are created', () => {
 
   test('new user is created', async () => {
     // usr = await helper.getUser()
-    // const blog = {...helper.blogs.valid, userId: usr[0].id }
 
     await api
       .post('/api/blogs')
       .send(helper.blogs.valid)
-      // .send(blog)
+      .set({"Authorization": 'bearer ' + toke})
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -74,7 +82,7 @@ describe('only valid blogs are created', () => {
     await api
       .post('/api/blogs')
       .send(helper.blogs.noLike)
-      // .send(blog)
+      .set({"Authorization": 'bearer ' + toke}) 
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -103,7 +111,7 @@ describe('only valid blogs are created', () => {
 
   // })
 
-  test('succeeds with status code 204 if id is valid', async () => {
+  test('should be able to delete', async () => {
     const notesAtStart = await api.get('/api/blogs')
     const noteToDelete =  notesAtStart.body[0]
 
