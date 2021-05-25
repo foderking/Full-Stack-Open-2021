@@ -2,28 +2,43 @@ const server = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
+const rand = (len) => {
+  return Math.floor(Math.random() * len)
+}
 
 server.get('/', (request, response) => {
   response.send('Hi')
 })
 
 server.get('/api/blogs', async(request, response) => {
-  blogs = await Blog.find({})
+  blogs = await Blog.find({}).populate('user', {username: 1, name:1, id:1})
   response.json(blogs)
 })
 
 server.post('/api/blogs', async(request, response) => {
   let blog = request.body
 
-  const user = await User.findById(blog.userId)
+  usr = await User.find({})
+  ids = usr.map( each => each._id )
+  id = ids[rand(ids.length)]
+  console.log(id)
 
-  if (!user) {
+  const user = await User.findById(id)
+  // const user = await User.findById(blog.userId)
+
+  // if (!user) {
+  //   return response.status(400).json({
+  //     "error": "invalid user id"
+  //   })
+  // }
+  if (!ids)  {
     return response.status(400).json({
       "error": "invalid user id"
     })
   }
 
-  blog = blog.likes ? {...blog, user: user._id }: {...blog, likes: 0, user: user._id }
+  blog = blog.likes ? {...blog, user: id }: {...blog, likes: 0, user: id }
+  // blog = blog.likes ? {...blog, user: user._id }: {...blog, likes: 0, user: user._id }
 
   blog = new Blog(blog)
   result = await blog.save()

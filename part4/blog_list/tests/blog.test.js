@@ -19,7 +19,7 @@ describe('only valid blogs are created', () => {
     const blog2 = new blog(helper.blogs.second)
     await blog1.save()
     await blog2.save()
-
+/*
     //  user initialization
     await User.deleteMany({})
     
@@ -28,7 +28,7 @@ describe('only valid blogs are created', () => {
     const user = await new User(initial)
 
     await user.save()    
-    // jest.setTimeout(10000);
+*/    // jest.setTimeout(10000);
   })
   
   test('should return correct amount of blog posts', async() => {
@@ -51,12 +51,13 @@ describe('only valid blogs are created', () => {
   })
 
   test('new user is created', async () => {
-    usr = await helper.getUser()
-    const blog = {...helper.blogs.valid, userId: usr[0].id }
+    // usr = await helper.getUser()
+    // const blog = {...helper.blogs.valid, userId: usr[0].id }
 
     await api
       .post('/api/blogs')
-      .send(blog)
+      .send(helper.blogs.valid)
+      // .send(blog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -66,13 +67,14 @@ describe('only valid blogs are created', () => {
   })
 
   test('blogs without like should default to 0', async() => {
-    usr = await helper.getUser()
+    // usr = await helper.getUser()
     const title = helper.blogs.noLike.title
-    const blog = {...helper.blogs.noLike, userId: usr[0].id }
+    // const blog = {...helper.blogs.noLike, userId: usr[0].id }
 
     await api
       .post('/api/blogs')
-      .send(blog)
+      .send(helper.blogs.noLike)
+      // .send(blog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
