@@ -4,9 +4,16 @@ const User = require('../models/user')
 
 usersRouter.post('/', async (request, response) => {
   const body = request.body
+  const pass = body.password
+
+  if (pass.length < 3) {
+    return  response.status(400).json({
+      'error': "minimum length of password is 3"
+    })
+  }
 
   const saltRounds = 6
-  const passwordHash = await bcrypt.hash(body.password, saltRounds)
+  const passwordHash = await bcrypt.hash(pass, saltRounds)
 
   const user = new User({
     username: body.username,
