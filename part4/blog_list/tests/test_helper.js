@@ -1,3 +1,7 @@
+const blog = require('../models/blog')
+const User = require('../models/user')
+
+
 const initialNotes = [
 	{
 	  title: 'foder',
@@ -38,6 +42,10 @@ const noUrl = {
 
 const none = {"author": "random"}
 
+const getUser = async() => {
+  const users = await User.find({})
+  return users.map(u => u.toJSON())
+}
 
 module.exports = { 
 	initialNotes, 
@@ -45,5 +53,6 @@ module.exports = {
 	noLike,
 	noTitle,
 	noUrl,
-	none
+	none,
+	getUser
 }
