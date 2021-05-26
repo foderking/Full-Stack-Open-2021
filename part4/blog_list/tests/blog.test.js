@@ -97,12 +97,13 @@ describe('only valid blogs are created', () => {
 
   })
 
-  // test('blogs with missing properties should return 400 error', async() => {
+  test('blogs with missing properties should return 400 error', async() => {
 
-  //   await api
-  //     .post('/api/blogs')
-  //     .send(helper.blogs.noTitle)
-  //     .expect(400)
+    await api
+      .post('/api/blogs')
+      .send(helper.blogs.noTitle)
+      .set({"Authorization": 'bearer ' + toke})
+      .expect(400)
   //   await api
   //     .post('/api/blogs')
   //     .send(helper.blogs.noUrl)
@@ -112,7 +113,7 @@ describe('only valid blogs are created', () => {
   //     .send(helper.blogs.none)
   //     .expect(400)
 
-  // })
+  })
 
   // test('should be able to delete', async () => {
   //   const notesAtStart = await api.get('/api/blogs')
