@@ -37,14 +37,11 @@ const tokenExtractor = (request, response, next) => {
 	const authorization = request.get('authorization') 
 	
 	if (authorization && authorization.toLowerCase().startsWith('bearer ')) { 
-		
 		const token = authorization.substring(7)
 		request.token = token 
-		// console.log('token accepted')
 	} 
 	else {
 		request.token = null
-		// console.log(authorization)
 	} 
 	next()
 }

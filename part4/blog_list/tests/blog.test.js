@@ -8,7 +8,7 @@ const blog = require('../models/blog')
 
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
-const { JsonWebTokenError } = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
 
 describe('only valid blogs are created', () => {
@@ -27,7 +27,6 @@ describe('only valid blogs are created', () => {
     await User.deleteMany({})
     
     const passwordHash = await bcrypt.hash('sekret', 6)
-    // const initial = {...helper.users.initial, passwordHash}
     const user = new User({...helper.users.initial, passwordHash})
 
     await user.save()    
@@ -58,13 +57,16 @@ describe('only valid blogs are created', () => {
   	expect(response.body[0].id).toBeDefined()
   	expect(response.body[1].id).toBeDefined()
   })
+
+
   test('should return correct amount of blog posts', async() => {
   	const response = await api.get('/api/blogs')
   	expect(response.body.length).toBe(2)
   })
-  test('new user is created', async () => {
-    // usr = await helper.getUser()
 
+
+
+  test('new user is created', async () => {
     await api
       .post('/api/blogs')
       .send(helper.blogs.valid)
@@ -78,9 +80,7 @@ describe('only valid blogs are created', () => {
   })
 
   test('blogs without like should default to 0', async() => {
-    // usr = await helper.getUser()
     const title = helper.blogs.noLike.title
-    // const blog = {...helper.blogs.noLike, userId: usr[0].id }
 
     await api
       .post('/api/blogs')
@@ -97,43 +97,38 @@ describe('only valid blogs are created', () => {
 
   })
 
+ 
   test('blogs with missing properties should return 400 error', async() => {
 
-    await api
+    let result = await api
       .post('/api/blogs')
       .send(helper.blogs.noTitle)
       .set({"Authorization": 'bearer ' + toke})
       .expect(400)
-  //   await api
-  //     .post('/api/blogs')
-  //     .send(helper.blogs.noUrl)
-  //     .expect(400)  
-  //   await api
-  //     .post('/api/blogs')
-  //     .send(helper.blogs.none)
-  //     .expect(400)
+
+    expect(result.body.error).toContain('Path `title` is required')
 
   })
 
-  // test('should be able to delete', async () => {
-  //   const notesAtStart = await api.get('/api/blogs')
-  //   const noteToDelete =  notesAtStart.body[0]
-  //   // console.log(toke.length)
-  //   await api
-  //     .delete(`/api/blogs/${noteToDelete.id}`)
-  //     .set({"Authorization": 'bearer ' + toke})
-  //     .expect(204)
+  test('should be able to delete', async () => {
+    const notesAtStart = await api.get('/api/blogs')
+    const noteToDelete =  notesAtStart.body[0]
 
-  //   const notesAtEnd = await api.get('/api/blogs')
-  //   expect(notesAtEnd.body).toHaveLength(
-  //     notesAtStart.body.length - 1
-  //   )
-  // })
+    await api
+      .delete(`/api/blogs/${noteToDelete.id}`)
+      .set({"Authorization": 'bearer ' + toke})
+      .expect(204)
+
+    const notesAtEnd = await api.get('/api/blogs')
+    expect(notesAtEnd.body).toHaveLength(
+      notesAtStart.body.length - 1
+    )
+  })
 })
 
 
 ///////////////////////////////////////////////////
-
+///
 ////////////////////////////////////////////////////
 
 describe('only valid users are created', () => {
@@ -142,7 +137,6 @@ describe('only valid users are created', () => {
     
     const passwordHash = await bcrypt.hash('sekret', 6)
     const initial = {...helper.users.initial, passwordHash}
-    // console.log(initial)
     const user = await new User(initial)
 
     await user.save()
@@ -180,7 +174,7 @@ describe('only valid users are created', () => {
       .send(usr)
       .expect(400)
       .expect('Content-Type', /application\/json/)
-      // console.log(result.body.error)
+
     expect(result.body.error).toContain('`username` to be unique')
 
     const usersAtEnd = await helper.getUser()

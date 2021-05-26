@@ -28,21 +28,21 @@ const blogs = {
 		likes: 12121		
 	}, 
 	noLike : {
-		"title": "wahala",
-		"author": "random",
-		"url": "/google.com"
+		title: "wahala",
+		author: "random",
+		url: "/google.com"
 	},
-	// noTitle : {	
-	// 	"author": "random", 
-	// 	"url": "/google.com" 
-	// },
-	// noUrl : {
-	// 	"title": "wahala",
-	// 	"author": "random"
-	// },
-	// none : {
-	// 	"author": "random"
-	// }
+	noTitle : {	
+		"author": "random", 
+		"url": "/google.com" 
+	},
+	noUrl : {
+		"title": "wahala",
+		"author": "random"
+	},
+	none : {
+		"author": "random"
+	}
 }
 
 
