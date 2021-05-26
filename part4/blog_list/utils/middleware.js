@@ -22,7 +22,7 @@ const errorHandler = (error, request, response, next) => {
 		return response.status(400).json({ error: error.message })
 	} else if (error.name === 'JsonWebTokenError') {
 		return response.status(401).json({
-			error: 'invalid token'
+			error: 'json: invalid token'
 		})
 	}
 
@@ -31,15 +31,18 @@ const errorHandler = (error, request, response, next) => {
 
 const tokenExtractor = (request, response, next) => {  
 	
+	const authorization = request.get('authorization') 
 	
-	if (request.method === "POST" && request.url === "/api/blogs") { 
-		const authorization = request.get('authorization') 
+	if (authorization && authorization.toLowerCase().startsWith('bearer ')) { 
+		
 		const token = authorization.substring(7)
-		// const body = request.body    
 		request.token = token 
-	}  
-	
-	// console.log('hi there')
+		// console.log('token accepted')
+	} 
+	else {
+		request.token = null
+		// console.log(authorization)
+	} 
 	next()
 }
 

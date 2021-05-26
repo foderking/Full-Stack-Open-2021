@@ -24,12 +24,10 @@ server.post('/api/blogs', async(request, response) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET)  
   const user = await User.findById(decodedToken.id)
   
-  if (!request.token || !decodedToken.id) {    
+  if (!request.token || !decodedToken.id) {  
+    console.log('something wrong with token')  
     return response.status(401).json({ error: 'token missing or invalid' }) 
-  } 
-  
-  // temp = await User.find({})
-  // console.log(temp)
+  }
   
 
   if (!user) {
@@ -42,6 +40,7 @@ server.post('/api/blogs', async(request, response) => {
 
   blog = new Blog(blog)
   result = await blog.save()
+  // console.log(request.token.length)
 
   user.blogs =  user.blogs.concat(result.id)
 
@@ -52,6 +51,34 @@ server.post('/api/blogs', async(request, response) => {
 
 // to be done later
 server.delete('/api/blogs/:id', async(request, response) => {
+  if (!request.token) {
+    return response.status(401).json({error: 'invalid token'})
+  }
+  // get user id of blog creator from blog id
+  const blog = await Blog.findById(request.params.id)
+  console.log(blog.user, 'ffffff')
+  const validId = blog.user
+ 
+
+  if (!blog || !validId) {
+    return response.status(401).json({error: "invalid blog"})
+  }
+  // get tokens user id
+  const decodedToken = jwt.verify(request.token, process.env.SECRET) 
+  const tokenId = decodedToken.id
+  
+  if (!tokenId || !decodedToken.id) {    
+    return response.status(401).json({ error: 'token missing or invalid' }) 
+  } 
+  // check if the two ids match
+  if (validId.toString() !== tokenId.toString()) {
+    console.log(validId, tokenId)
+    return response.status(401).json({ error: 'invalid user' }) 
+  }
+  // delete blog if the match
+  
+  
+
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
