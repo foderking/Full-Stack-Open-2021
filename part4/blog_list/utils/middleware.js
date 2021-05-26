@@ -1,5 +1,8 @@
-const { CLIEngine } = require('eslint')
+// const { CLIEngine } = require('eslint')
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
+const User = require('../models/user')
+
 
 const requestLogger = (request, response, next) => {
 	logger.info('Method:', request.method)
@@ -46,9 +49,39 @@ const tokenExtractor = (request, response, next) => {
 	next()
 }
 
+const userExtractor = async(request, response, next) => {
+	if (request.token) {
+		const decodedToken = jwt.verify(request.token, process.env.SECRET)  
+		const user = await User.findById(decodedToken.id)
+
+
+		if (!request.token || !decodedToken.id) {  
+			console.log('something wrong with token')  
+			return response.status(401).json({ error: 'token missing or invalid' }) 
+		}
+
+		if (!user) {
+			request.users = null
+			return response.status(400).json({
+				"error": "invalid user id"
+			})
+		}		
+
+		request.users = user
+	}
+	else {
+		request.users = null
+	}
+
+
+	next()
+	
+}
+
 module.exports = {
 	requestLogger,
 	unknownEndpoint,
 	errorHandler,
-	tokenExtractor
+	tokenExtractor,
+	userExtractor
 }
