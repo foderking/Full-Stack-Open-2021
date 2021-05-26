@@ -20,7 +20,7 @@ describe('only valid blogs are created', () => {
 
     const blog1 = new blog(helper.blogs.first)
     const blog2 = new blog(helper.blogs.second)
-    await blog1.save()
+    await blog1.save(j)
     await blog2.save()
 
     //  user initialization
