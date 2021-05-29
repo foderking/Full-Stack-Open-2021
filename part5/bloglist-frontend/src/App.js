@@ -15,6 +15,8 @@ const App = () => {
   const [blogAuthor, setAuthor] = useState('')
   const [blogUrl, setUrl] = useState('')
 
+  const [error, setError] = useState('')
+  const [classtype, setType] = useState('success')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -23,12 +25,13 @@ const App = () => {
   }, [])
 
 
-
+  const notify = (message, type) => {           // Function for the notification commponent
+    setError(message)
+    setType(type)
+    setTimeout(() => setError(false), 4000 )
+  }
 
   
-  // blogService.setToken(password)
-  // console.log(window.localStorage.activeUser, 'affff')
-
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -36,21 +39,22 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
-      window.localStorage.setItem('activeUser', user.token)
-      // blogService.setToken(user.token)i
-      console.log('logged in with', user.username)
+
+      notify(`${user.username} logged in successfully` , 'success')
       setUser(user)
-      // console.log('token', blogService.token)
+
+      window.localStorage.setItem('activeUser', user.token)
       setUsername('')
       setPassword('')
     }
     catch (exception) {
-      console.log(exception)  
+      notify(exception.response.data.error, 'error')
     }
   }
 
   const handleLogout = (event) => {
     event.preventDefault()
+    notify(`logged out successfully` , 'success')
     setUser(null)
   }
 
@@ -65,15 +69,16 @@ const App = () => {
       })
 
       setBlogs(blogs.concat(newBlog))            
-      // blogService.setToken(user.token)
+
       setTitle('')
       setAuthor('')
       setUrl('')
       
-      console.log('added', newBlog )
+      notify(`${newBlog.title} posted successfully` , 'success')
     }
     catch (exception) {
-      console.log(exception)  
+      notify(exception.response.data.error, 'error')
+      // notify(exception.message, 'error')
     }
   }    
   
@@ -162,6 +167,14 @@ const App = () => {
 
   return (
     <div>
+      {error ? 
+        <Notification 
+          message={error} 
+          class_={classtype} 
+        /> 
+             : 
+        <></>
+      }
       { 	
         user === null 
           ? Login()
@@ -182,6 +195,18 @@ const InputComp = (props) =>
   </div>
 
 
+
+const Notification = ({ message, class_}) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className={class_}>
+      {message}
+    </div>
+  )
+}
 
 
 export default App
