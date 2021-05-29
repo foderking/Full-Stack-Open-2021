@@ -6,9 +6,14 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+
   const [username, setUsername] = useState('')  
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
+
+  const [blogTitle, setTitle] = useState('')
+  const [blogAuthor, setAuthor] = useState('')
+  const [blogUrl, setUrl] = useState('')
 
 
   useEffect(() => {
@@ -19,14 +24,23 @@ const App = () => {
 
 
 
+
+  
+  // blogService.setToken(password)
+  // console.log(window.localStorage.activeUser, 'affff')
+
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login({
         username, password,
       })
-      window.localStorage.setItem('activeUser', JSON.stringify(user))
+      window.localStorage.setItem('activeUser', user.token)
+      // blogService.setToken(user.token)i
+      console.log('logged in with', user.username)
       setUser(user)
+      // console.log('token', blogService.token)
       setUsername('')
       setPassword('')
     }
@@ -40,30 +54,84 @@ const App = () => {
     setUser(null)
   }
 
+  const handleBlogPost = async(event) => {
+    event.preventDefault()
+    console.log('creating new blog')
+    try {
+      const newBlog = await blogService.post({
+        blogTitle,
+        blogAuthor,
+        blogUrl
+      })
+
+      setBlogs(blogs.concat(newBlog))            
+      // blogService.setToken(user.token)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      
+      console.log('added', newBlog )
+    }
+    catch (exception) {
+      console.log(exception)  
+    }
+  }    
+  
+
+  const CreateBlog = (props) => {
+    return (
+      <div>
+        <form onSubmit={handleBlogPost}>
+          <InputComp
+            desc='Title' 
+            type='text'
+            value={blogTitle}
+            change={setTitle}
+          />
+          <InputComp 
+            desc='Author'
+            type='text'
+            value={blogAuthor}
+            change={setAuthor}
+          />
+          <InputComp 
+            desc='Url'
+            type='text'
+            value={blogUrl}
+            change={setUrl}
+          />
+        <button type='submit'>create</button>
+        </form>
+
+      </div>
+    )
+  }
+
   const Login = () => {
     window.localStorage.setItem('activeUser', null)
     return (
       <div>
         <h2>Log in to application</h2>
+
         <form onSubmit={handleLogin}>
           <div>
-            username
-              <input
-                type="text"
-                value={username}
-                onChange={({ target }) => setUsername(target.value)}
-              />
+            <InputComp 
+              desc='Username'
+              type='text'
+              value={username}
+              change={setUsername}
+            />
           </div>
           
           <div>
-            password
-              <input
-                type="password"
+            <InputComp 
+                desc='Password'
+                type='password'
                 value={password}
-                name="Password"
-                onChange={({ target }) => setPassword(target.value)}
-              />
+                change={setPassword}
+            />
           </div>
+
           <button type="submit">login</button>
         </form>   
       </div>
@@ -79,6 +147,9 @@ const App = () => {
         {user.username} is logged in
         <button type="submit" >logout</button>
       </form>
+
+      {CreateBlog()}
+
       {
         blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
@@ -99,5 +170,18 @@ const App = () => {
     </div>
   )
 }
+
+const InputComp = (props) => 
+  <div>
+    {props.desc}
+    <input 
+      type={props.type}
+      value={props.value}
+      onChange={({ target }) => props.change(target.value)}
+    />
+  </div>
+
+
+
 
 export default App

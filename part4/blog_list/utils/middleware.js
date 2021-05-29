@@ -27,6 +27,10 @@ const errorHandler = (error, request, response, next) => {
 		return response.status(401).json({
 			error: 'json: invalid token'
 		})
+	} else {
+		response.status(400).json({
+			error: error.message
+		})
 	}
 
 	next(error)
