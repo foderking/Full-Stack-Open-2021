@@ -18,6 +18,8 @@ const App = () => {
   const [error, setError] = useState('')
   const [classtype, setType] = useState('success')
 
+  const [createBlogVis, setBlogVis] = useState(true)
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -25,9 +27,10 @@ const App = () => {
   }, [])
 
 
-  const notify = (message, type) => {           // Function for the notification commponent
+  const notify = (message, type) => {                // Function for the notification commponent
     setError(message)
     setType(type)
+
     setTimeout(() => setError(false), 4000 )
   }
 
@@ -35,6 +38,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
+
     try {
       const user = await loginService.login({
         username, password,
@@ -54,6 +58,7 @@ const App = () => {
 
   const handleLogout = (event) => {
     event.preventDefault()
+
     notify(`logged out successfully` , 'success')
     setUser(null)
   }
@@ -61,6 +66,7 @@ const App = () => {
   const handleBlogPost = async(event) => {
     event.preventDefault()
     console.log('creating new blog')
+
     try {
       const newBlog = await blogService.post({
         blogTitle,
@@ -74,43 +80,15 @@ const App = () => {
       setAuthor('')
       setUrl('')
       
+      setBlogVis(false)
+      
       notify(`${newBlog.title} posted successfully` , 'success')
     }
     catch (exception) {
       notify(exception.response.data.error, 'error')
-      // notify(exception.message, 'error')
     }
   }    
   
-
-  const CreateBlog = (props) => {
-    return (
-      <div>
-        <form onSubmit={handleBlogPost}>
-          <InputComp
-            desc='Title' 
-            type='text'
-            value={blogTitle}
-            change={setTitle}
-          />
-          <InputComp 
-            desc='Author'
-            type='text'
-            value={blogAuthor}
-            change={setAuthor}
-          />
-          <InputComp 
-            desc='Url'
-            type='text'
-            value={blogUrl}
-            change={setUrl}
-          />
-        <button type='submit'>create</button>
-        </form>
-
-      </div>
-    )
-  }
 
   const Login = () => {
     window.localStorage.setItem('activeUser', null)
@@ -143,7 +121,7 @@ const App = () => {
     )
   } 
 
-  
+  const showWhenVisible = { display: createBlogVis ? '' : 'none' }  
   
   const Blogs = () => (
     <div>
@@ -153,7 +131,21 @@ const App = () => {
         <button type="submit" >logout</button>
       </form>
 
-      {CreateBlog()}
+      <div style={showWhenVisible}>
+        <CreateBlog
+          handleBlogPost={handleBlogPost}
+          blogTitle={blogTitle}
+          setTitle={setTitle}
+          blogAuthor={blogAuthor}
+          setAuthor={setAuthor} 
+          blogUrl={blogUrl} 
+          setUrl={setUrl}
+        />
+      </div>
+
+      <button type="submit" onClick={() => setBlogVis(!createBlogVis)} >
+        {createBlogVis ? 'cancel' : 'create blog'}
+      </button>
 
       {
         blogs.map(blog =>
@@ -204,6 +196,36 @@ const Notification = ({ message, class_}) => {
   return (
     <div className={class_}>
       {message}
+    </div>
+  )
+}
+
+const CreateBlog = ({handleBlogPost, blogTitle, setTitle, blogAuthor, setAuthor, blogUrl, setUrl}) => {
+  return (
+    <div>
+      <h2>Create Blog</h2> 
+      <form onSubmit={handleBlogPost}>
+        <InputComp
+          desc='Title' 
+          type='text'
+          value={blogTitle}
+          change={setTitle}
+        />
+        <InputComp 
+          desc='Author'
+          type='text'
+          value={blogAuthor}
+          change={setAuthor}
+        />
+        <InputComp 
+          desc='Url'
+          type='text'
+          value={blogUrl}
+          change={setUrl}
+        />
+        <button type='submit'>create</button>
+      </form>
+
     </div>
   )
 }
