@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 // import blogService from './services/blogs'
 
 
-const Blog = ({blog, increaseLike, removeBlog}) => {
+const Blog = ({ blog, increaseLike, removeBlog }) => {
   const [seeFull, setSee] = useState(true)
 
   const blogStyle = {
@@ -20,21 +20,21 @@ const Blog = ({blog, increaseLike, removeBlog}) => {
         <FullBlog blog={blog} increaseLike={() => increaseLike(blog)} />
       }
       <button onClick={() => setSee(!seeFull)}>
-        {seeFull ? 'see more' : 'see less'} 
+        {seeFull ? 'see more' : 'see less'}
       </button >
       <button onClick={() => removeBlog(blog)}>
         remove
       </button>
-    </div>  
+    </div>
   )
 }
 
-const PartBlog = ({blog}) => 
+const PartBlog = ({ blog }) =>
   <>
     {blog.title}  {blog.author}
   </>
 
-const FullBlog = ({blog, increaseLike}) =>
+const FullBlog = ({ blog, increaseLike }) =>
   <>
     <div>{blog.title}</div>
     <div>{blog.author}</div>

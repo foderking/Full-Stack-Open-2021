@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login' 
+import loginService from './services/login'
 import PropTypes from 'prop-types'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
 
-  const [username, setUsername] = useState('')  
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   const [blogTitle, setTitle] = useState('')
@@ -24,7 +24,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
 
@@ -35,7 +35,7 @@ const App = () => {
     setTimeout(() => setError(false), 4000 )
   }
 
-  
+
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -60,7 +60,7 @@ const App = () => {
   const handleLogout = (event) => {
     event.preventDefault()
 
-    notify(`logged out successfully` , 'success')
+    notify('logged out successfully' , 'success')
     setUser(null)
   }
 
@@ -75,30 +75,30 @@ const App = () => {
         blogUrl
       })
 
-      const temp  = await blogService.getAll() 
-      setBlogs(temp)            
+      const temp  = await blogService.getAll()
+      setBlogs(temp)
 
       setTitle('')
       setAuthor('')
       setUrl('')
-      
+
       setBlogVis(false)
-      
+
       notify(`${newBlog.title} posted successfully` , 'success')
     }
     catch (exception) {
       notify(exception.response.data.error, 'error')
     }
-  }    
+  }
 
 
   const increaseLike = async(blog) => {
-    const newBlog = {...blog, likes: blog.likes + 1}
+    const newBlog = { ...blog, likes: blog.likes + 1 }
     const response = await blogService.update(newBlog)
-    
+
     const temp = blogs.find(each => each.id === response.id)
-    
-    const newb = {...temp, likes: response.likes}
+
+    const newb = { ...temp, likes: response.likes }
     const t = blogs.map(
       each => each.id === temp.id ? newb : each
     )
@@ -111,14 +111,14 @@ const App = () => {
       const id = blog.id
 
       await blogService.del(blog)
-    
+
       const t = await blogService.getAll()
       setBlogs(t)
       console.log(id, 'removed')
     }
     else {
       if (user.username !== blog.user.username) {
-        notify(`Blog wasn't created by ${user.username}`, "error")
+        notify(`Blog wasn't created by ${user.username}`, 'error')
       }
       console.log('blog wasn\'t deleted')
     }
@@ -133,31 +133,31 @@ const App = () => {
 
         <form onSubmit={handleLogin}>
           <div>
-            <InputComp 
+            <InputComp
               desc='Username'
               type='text'
               value={username}
               change={setUsername}
             />
           </div>
-          
+
           <div>
-            <InputComp 
-                desc='Password'
-                type='password'
-                value={password}
-                change={setPassword}
+            <InputComp
+              desc='Password'
+              type='password'
+              value={password}
+              change={setPassword}
             />
           </div>
 
           <button type="submit">login</button>
-        </form>   
+        </form>
       </div>
     )
-  } 
+  }
 
-  const showWhenVisible = { display: createBlogVis ? '' : 'none' }  
-  
+  const showWhenVisible = { display: createBlogVis ? '' : 'none' }
+
   const Blogs = () => (
     <div>
       <h2>blogs</h2>
@@ -172,8 +172,8 @@ const App = () => {
           blogTitle={blogTitle}
           setTitle={setTitle}
           blogAuthor={blogAuthor}
-          setAuthor={setAuthor} 
-          blogUrl={blogUrl} 
+          setAuthor={setAuthor}
+          blogUrl={blogUrl}
           setUrl={setUrl}
         />
       </div>
@@ -184,35 +184,35 @@ const App = () => {
 
       {
         blogs
-        .sort( (a, b) => {
-          return b.likes - a.likes 
-        })
-        .map(blog =>
-            <Blog 
-              key={blog.id} 
-              blog={blog} 
-              increaseLike={increaseLike} 
+          .sort( (a, b) => {
+            return b.likes - a.likes
+          })
+          .map(blog =>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              increaseLike={increaseLike}
               removeBlog={removeBlog}
             />
-        )
+          )
       }
-    </div>    
+    </div>
   )
 
 
 
   return (
     <div>
-      {error ? 
-        <Notification 
-          message={error} 
-          class_={classtype} 
-        /> 
-             : 
+      {error ?
+        <Notification
+          message={error}
+          class_={classtype}
+        />
+        :
         <></>
       }
-      { 	
-        user === null 
+      {
+        user === null
           ? Login()
           : Blogs()
       }
@@ -220,10 +220,10 @@ const App = () => {
   )
 }
 
-const InputComp = (props) => 
+const InputComp = (props) =>
   <div>
     {props.desc}
-    <input 
+    <input
       type={props.type}
       value={props.value}
       onChange={({ target }) => props.change(target.value)}
@@ -232,7 +232,7 @@ const InputComp = (props) =>
 
 
 
-const Notification = ({ message, class_}) => {
+const Notification = ({ message, class_ }) => {
   if (message === null) {
     return null
   }
@@ -244,10 +244,10 @@ const Notification = ({ message, class_}) => {
   )
 }
 
-const CreateBlog = ({handleBlogPost, blogTitle, setTitle, blogAuthor, setAuthor, blogUrl, setUrl}) => {
+const CreateBlog = ({ handleBlogPost, blogTitle, setTitle, blogAuthor, setAuthor, blogUrl, setUrl }) => {
   CreateBlog.propTypes = {
     handleBlogPost : PropTypes.func.isRequired,
-    blogTitle: PropTypes.string.isRequired, 
+    blogTitle: PropTypes.string.isRequired,
     setTitle : PropTypes.func.isRequired,
     blogAuthor : PropTypes.string.isRequired,
     setAuthor : PropTypes.func.isRequired,
@@ -257,21 +257,21 @@ const CreateBlog = ({handleBlogPost, blogTitle, setTitle, blogAuthor, setAuthor,
 
   return (
     <div>
-      <h2>Create Blog</h2> 
+      <h2>Create Blog</h2>
       <form onSubmit={handleBlogPost}>
         <InputComp
-          desc='Title' 
+          desc='Title'
           type='text'
           value={blogTitle}
           change={setTitle}
         />
-        <InputComp 
+        <InputComp
           desc='Author'
           type='text'
           value={blogAuthor}
           change={setAuthor}
         />
-        <InputComp 
+        <InputComp
           desc='Url'
           type='text'
           value={blogUrl}
