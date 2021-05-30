@@ -23,7 +23,7 @@ server.post('/api/blogs', async(request, response) => {
   result = await blog.save()
 
   user.blogs =  user.blogs.concat(result.id)
-
+  // console.log(result)
   await user.save()
   response.status(201).json(result)
 })

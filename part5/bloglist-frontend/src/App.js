@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login' 
-
+import PropTypes from 'prop-types'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -75,7 +75,8 @@ const App = () => {
         blogUrl
       })
 
-      setBlogs(blogs.concat(newBlog))            
+      const temp  = await blogService.getAll() 
+      setBlogs(temp)            
 
       setTitle('')
       setAuthor('')
@@ -111,13 +112,14 @@ const App = () => {
 
       await blogService.del(blog)
     
-      const t = blogs.filter(
-        each => each.id !== id 
-      )
+      const t = await blogService.getAll()
       setBlogs(t)
       console.log(id, 'removed')
     }
     else {
+      if (user.username !== blog.user.username) {
+        notify(`Blog wasn't created by ${user.username}`, "error")
+      }
       console.log('blog wasn\'t deleted')
     }
 
@@ -243,6 +245,16 @@ const Notification = ({ message, class_}) => {
 }
 
 const CreateBlog = ({handleBlogPost, blogTitle, setTitle, blogAuthor, setAuthor, blogUrl, setUrl}) => {
+  CreateBlog.propTypes = {
+    handleBlogPost : PropTypes.func.isRequired,
+    blogTitle: PropTypes.string.isRequired, 
+    setTitle : PropTypes.func.isRequired,
+    blogAuthor : PropTypes.string.isRequired,
+    setAuthor : PropTypes.func.isRequired,
+    blogUrl : PropTypes.string.isRequired,
+    setUrl: PropTypes.func.isRequired
+  }
+
   return (
     <div>
       <h2>Create Blog</h2> 
