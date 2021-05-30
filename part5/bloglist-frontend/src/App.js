@@ -1,3 +1,4 @@
+// import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
@@ -92,11 +93,10 @@ const App = () => {
 
   const increaseLike = async(blog) => {
     const newBlog = {...blog, likes: blog.likes + 1}
-    // console.log(newBlog)
     const response = await blogService.update(newBlog)
-    // console.log(response)
+    
     const temp = blogs.find(each => each.id === response.id)
-    // console.log(temp)
+    
     const newb = {...temp, likes: response.likes}
     const t = blogs.map(
       each => each.id === temp.id ? newb : each
@@ -104,7 +104,20 @@ const App = () => {
     setBlogs(t)
   }
 
+  const removeBlog = async(blog) => {
+    if (window.confirm(`Remove "${blog.title}" by ${blog.author}?`)) {
+      const id = blog.id
 
+      await blogService.del(blog)
+    
+      const t = blogs.filter(
+        each => each.id !== id 
+      )
+      setBlogs(t)
+      console.log(id, 'removed')
+    }
+
+  }
 
   const Login = () => {
     window.localStorage.setItem('activeUser', null)
@@ -169,7 +182,12 @@ const App = () => {
           return b.likes - a.likes 
         })
         .map(blog =>
-            <Blog key={blog.id} blog={blog} increaseLike={increaseLike} />
+            <Blog 
+              key={blog.id} 
+              blog={blog} 
+              increaseLike={increaseLike} 
+              removeBlog={removeBlog}
+            />
         )
       }
     </div>    

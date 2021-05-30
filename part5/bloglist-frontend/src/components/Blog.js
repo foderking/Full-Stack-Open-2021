@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 // import blogService from './services/blogs'
 
 
-const Blog = ({blog, increaseLike}) => {
+const Blog = ({blog, increaseLike, removeBlog}) => {
   const [seeFull, setSee] = useState(true)
 
   const blogStyle = {
@@ -21,6 +21,9 @@ const Blog = ({blog, increaseLike}) => {
       }
       <button onClick={() => setSee(!seeFull)}>
         {seeFull ? 'see more' : 'see less'} 
+      </button >
+      <button onClick={() => removeBlog(blog)}>
+        remove
       </button>
     </div>  
   )

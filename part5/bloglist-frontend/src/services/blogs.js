@@ -14,7 +14,7 @@ const getAll = () => {
 
 const post =  async blog => {
 	token = setToken(window.localStorage.activeUser)
-	console.log('trying to post create blog with toke:', token)
+	console.log('trying to create blog with toke:', token)
 
   const config = {    
 		headers: { Authorization: token}
@@ -37,6 +37,18 @@ const update = async(blog) => {
 	return response.data
 }
 
+const del = async blog => {
+	token = setToken(window.localStorage.activeUser)
+	console.log('trying to delete blog with toke:', token)
 
-const exp = { getAll, post, setToken, update }
+  const config = {    
+		headers: { Authorization: token}
+	}
+
+	const url = `${baseUrl}/${blog.id}`
+	const response = await axios.delete(url, config)	
+	return response.data
+}
+
+const exp = { getAll, post, setToken, update, del }
 export default exp
