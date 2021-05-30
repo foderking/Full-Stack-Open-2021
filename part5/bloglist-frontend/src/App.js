@@ -105,7 +105,8 @@ const App = () => {
   }
 
   const removeBlog = async(blog) => {
-    if (window.confirm(`Remove "${blog.title}" by ${blog.author}?`)) {
+    console.log(user.username, blog.user.username)
+    if ( window.confirm(`Remove "${blog.title}" by ${blog.author}?`) && user.username === blog.user.username) {
       const id = blog.id
 
       await blogService.del(blog)
@@ -115,6 +116,9 @@ const App = () => {
       )
       setBlogs(t)
       console.log(id, 'removed')
+    }
+    else {
+      console.log('blog wasn\'t deleted')
     }
 
   }
