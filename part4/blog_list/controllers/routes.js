@@ -38,19 +38,20 @@ server.delete('/api/blogs/:id', async(request, response) => {
   response.status(204).end()
 })
 
-// server.put('/api/blogs/:id', async(request, response, next) => {
-//   const body = request.body
+server.put('/api/blogs/:id', async(request, response, next) => {
+  const body = request.body
 
-//   const blog = {
-//     title: body.title,
-//     author: body.author,
-//     url: body.url,
-//     likes: body.likes
-//   }
-
-//   result = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-//     response.json(result.toJSON())
-// })
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes
+  }
+  // console.log(body)
+  result = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  // console.log(result)
+  response.json(result.toJSON())
+})
 
 
 module.exports = server

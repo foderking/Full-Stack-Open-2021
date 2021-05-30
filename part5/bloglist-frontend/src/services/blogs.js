@@ -30,7 +30,13 @@ const post =  async blog => {
 	return response.data
 }
 
+const update = async(blog) => {
+	const url = `${baseUrl}/${blog.id}`
+	console.log(url)
+	const response = await axios.put(url, blog)
+	return response.data
+}
 
 
-const exp = { getAll, post, setToken }
+const exp = { getAll, post, setToken, update }
 export default exp

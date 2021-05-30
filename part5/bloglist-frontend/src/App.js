@@ -88,7 +88,23 @@ const App = () => {
       notify(exception.response.data.error, 'error')
     }
   }    
-  
+
+
+  const increaseLike = async(blog) => {
+    const newBlog = {...blog, likes: blog.likes + 1}
+    // console.log(newBlog)
+    const response = await blogService.update(newBlog)
+    // console.log(response)
+    const temp = blogs.find(each => each.id === response.id)
+    // console.log(temp)
+    const newb = {...temp, likes: response.likes}
+    const t = blogs.map(
+      each => each.id === temp.id ? newb : each
+    )
+    setBlogs(t)
+  }
+
+
 
   const Login = () => {
     window.localStorage.setItem('activeUser', null)
@@ -149,7 +165,7 @@ const App = () => {
 
       {
         blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} increaseLike={increaseLike} />
         )
       }
     </div>    
