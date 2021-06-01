@@ -47,7 +47,7 @@ const blog = {
 
 test('authors and title only are displayed by default', () => {
 	const component = render(
-		<Blog 
+		<Blog
 			blog={blog}
 			increaseLike={increaseLike}
 			removeBlog={removeBlog}
@@ -55,8 +55,8 @@ test('authors and title only are displayed by default', () => {
 	)
 	const div = component.container.querySelector('.partial')
 
-	expect(div).toHaveTextContent('what the fuck')	
-	expect(div).toHaveTextContent('Mashishi kishimoto')	
+	expect(div).toHaveTextContent('what the fuck')
+	expect(div).toHaveTextContent('Mashishi kishimoto')
 })
 
 
@@ -64,16 +64,36 @@ test('clicking button shows url and likes', () => {
 	// const mockHandler = jest.fn()
 
 	const component = render(
-		<Blog 
+		<Blog
 			blog={blog}
 			increaseLike={increaseLike}
 			removeBlog={removeBlog}
 		/>
 	)
-  const button = component.getByText('see more')
-  fireEvent.click(button)
+	const button = component.getByText('see more')
+	fireEvent.click(button)
 
 	const div = component.container.querySelector('.full')
-	expect(div).toHaveTextContent('www.google.com')	
+	expect(div).toHaveTextContent('www.google.com')
 	expect(div).toHaveTextContent('4902449')
+})
+
+test('clicking like twice', () => {
+	const mockHandler = jest.fn()
+
+	const component = render(
+		<Blog
+			blog={blog}
+			increaseLike={mockHandler}
+			removeBlog={removeBlog}
+		/>
+	)
+	const button = component.getByText('see more')
+	fireEvent.click(button)
+
+	const like= component.getByText('like')
+	fireEvent.click(like)
+	fireEvent.click(like)
+
+	expect(mockHandler.mock.calls).toHaveLength(2)
 })
