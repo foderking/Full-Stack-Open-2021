@@ -1,7 +1,8 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+// import { render } from '@testing-library/react'
 import Blog from './Blog'
+import { render, fireEvent } from '@testing-library/react'
 
 
 const increaseLike = async(blog) => {
@@ -37,15 +38,14 @@ const removeBlog = async(blog) => {
 
 }
 
+const blog = {
+	title: 'what the fuck',
+	author: 'Mashishi kishimoto',
+	url: 'www.google.com',
+	likes: 4902449
+}
+
 test('authors and title only are displayed by default', () => {
-	const blog = {
-		title: 'what the fuck',
-		author: 'Mashishi kishimoto',
-		url: 'www.google.com',
-		likes: 4902449
-	}
-
-
 	const component = render(
 		<Blog 
 			blog={blog}
@@ -57,4 +57,23 @@ test('authors and title only are displayed by default', () => {
 
 	expect(div).toHaveTextContent('what the fuck')	
 	expect(div).toHaveTextContent('Mashishi kishimoto')	
+})
+
+
+test('clicking button shows url and likes', () => {
+	// const mockHandler = jest.fn()
+
+	const component = render(
+		<Blog 
+			blog={blog}
+			increaseLike={increaseLike}
+			removeBlog={removeBlog}
+		/>
+	)
+  const button = component.getByText('see more')
+  fireEvent.click(button)
+
+	const div = component.container.querySelector('.full')
+	expect(div).toHaveTextContent('www.google.com')	
+	expect(div).toHaveTextContent('4902449')
 })
