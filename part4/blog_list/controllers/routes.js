@@ -1,6 +1,6 @@
 const server = require('express').Router()
 const Blog = require('../models/blog')
-// const User = require('../models/user')
+const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 
@@ -27,6 +27,15 @@ server.post('/api/blogs', async(request, response) => {
   await user.save()
   response.status(201).json(result)
 })
+
+// // if (process.env.NODE_ENV === 'test') {
+// 	server.post('/reset', async (request, response) => {
+// 		// await Blog.deleteMany({})
+// 		// await User.deleteMany({})
+
+// 		response.status(204).end()
+// 	})
+// }
 
 server.delete('/api/blogs/:id', async(request, response) => {
 

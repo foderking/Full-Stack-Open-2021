@@ -1,42 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '@testing-library/jest-dom/extend-expect'
 // import { render } from '@testing-library/react'
 import Blog from './Blog'
+// import CreateBlog from './CreateBlog'
 import { render, fireEvent } from '@testing-library/react'
 
 
-const increaseLike = async(blog) => {
-	const newBlog = { ...blog, likes: blog.likes + 1 }
-	const response = await blogService.update(newBlog)
-
-	const temp = blogs.find(each => each.id === response.id)
-
-	const newb = { ...temp, likes: response.likes }
-	const t = blogs.map(
-		each => each.id === temp.id ? newb : each
-	)
-	setBlogs(t)
-}
-
-const removeBlog = async(blog) => {
-	console.log(user.username, blog.user.username)
-	if ( window.confirm(`Remove "${blog.title}" by ${blog.author}?`) && user.username === blog.user.username) {
-		const id = blog.id
-
-		await blogService.del(blog)
-
-		const t = await blogService.getAll()
-		setBlogs(t)
-		console.log(id, 'removed')
-	}
-	else {
-		if (user.username !== blog.user.username) {
-			notify(`Blog wasn't created by ${user.username}`, 'error')
-		}
-		console.log('blog wasn\'t deleted')
-	}
-
-}
 
 const blog = {
 	title: 'what the fuck',
@@ -45,12 +14,15 @@ const blog = {
 	likes: 4902449
 }
 
+
+
+
 test('authors and title only are displayed by default', () => {
 	const component = render(
 		<Blog
 			blog={blog}
-			increaseLike={increaseLike}
-			removeBlog={removeBlog}
+			increaseLike={() => {}}
+			removeBlog={() => {}}
 		/>
 	)
 	const div = component.container.querySelector('.partial')
@@ -61,13 +33,11 @@ test('authors and title only are displayed by default', () => {
 
 
 test('clicking button shows url and likes', () => {
-	// const mockHandler = jest.fn()
-
 	const component = render(
 		<Blog
 			blog={blog}
-			increaseLike={increaseLike}
-			removeBlog={removeBlog}
+			increaseLike={() => {}}
+			removeBlog={() => {}}
 		/>
 	)
 	const button = component.getByText('see more')
@@ -85,7 +55,7 @@ test('clicking like twice', () => {
 		<Blog
 			blog={blog}
 			increaseLike={mockHandler}
-			removeBlog={removeBlog}
+			removeBlog={() => {}}
 		/>
 	)
 	const button = component.getByText('see more')
@@ -97,3 +67,25 @@ test('clicking like twice', () => {
 
 	expect(mockHandler.mock.calls).toHaveLength(2)
 })
+
+// test('submitting forms', () => {
+// 	const [blogTitle, setTitle] = useState('')
+// 	const [blogAuthor, setAuthor] = useState('')
+// 	const [blogUrl, setUrl] = useState('')
+
+// 	const handleBlogPost = jest.fn() 
+
+// 	const component = render(
+// 		< CreateBlog  handleBlogPost={handleBlogPost} blogTitle={blogTitle} setTitle={setTitle} blogAuthor={blogAuthor} setAuthor={setAuthor} blogUrl={blogUrl} setUrl={setUrl} /> 
+// 	)
+// 	const author = component.container.querySelector('#Author')
+//   const form = component.container.querySelector('form')
+
+// 	fireEvent.change(author, { 
+//     target: { value: 'testing of forms could be easier' } 
+//   })
+//   fireEvent.submit(form)
+
+//   expect(createNote.mock.calls).toHaveLength(1)
+//   expect(createNote.mock.calls[0][0].content).toBe('testing of forms could be easier' )
+// })

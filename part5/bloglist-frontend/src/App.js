@@ -1,9 +1,10 @@
 // import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import CreateBlog from './components/CreateBlog'
+import InputComp from './components/InputComp'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import PropTypes from 'prop-types'
 
 const App = () => {
 	const [blogs, setBlogs] = useState([])
@@ -220,16 +221,6 @@ const App = () => {
 	)
 }
 
-const InputComp = (props) =>
-	<div>
-		{props.desc}
-		<input
-			type={props.type}
-			value={props.value}
-			onChange={({ target }) => props.change(target.value)}
-		/>
-	</div>
-
 
 
 const Notification = ({ message, class_ }) => {
@@ -244,45 +235,7 @@ const Notification = ({ message, class_ }) => {
 	)
 }
 
-const CreateBlog = ({ handleBlogPost, blogTitle, setTitle, blogAuthor, setAuthor, blogUrl, setUrl }) => {
-	CreateBlog.propTypes = {
-		handleBlogPost : PropTypes.func.isRequired,
-		blogTitle: PropTypes.string.isRequired,
-		setTitle : PropTypes.func.isRequired,
-		blogAuthor : PropTypes.string.isRequired,
-		setAuthor : PropTypes.func.isRequired,
-		blogUrl : PropTypes.string.isRequired,
-		setUrl: PropTypes.func.isRequired
-	}
 
-	return (
-		<div>
-			<h2>Create Blog</h2>
-			<form onSubmit={handleBlogPost}>
-				<InputComp
-					desc='Title'
-					type='text'
-					value={blogTitle}
-					change={setTitle}
-				/>
-				<InputComp
-					desc='Author'
-					type='text'
-					value={blogAuthor}
-					change={setAuthor}
-				/>
-				<InputComp
-					desc='Url'
-					type='text'
-					value={blogUrl}
-					change={setUrl}
-				/>
-				<button type='submit'>create</button>
-			</form>
-
-		</div>
-	)
-}
 
 
 export default App
