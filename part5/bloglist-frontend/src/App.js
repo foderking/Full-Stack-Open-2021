@@ -104,6 +104,7 @@ const App = () => {
 			each => each.id === temp.id ? newb : each
 		)
 		setBlogs(t)
+		notify(`${newb.title} liked` , 'success')
 	}
 
 	const removeBlog = async(blog) => {
@@ -183,20 +184,23 @@ const App = () => {
 				{createBlogVis ? 'cancel' : 'create blog'}
 			</button>
 
-			{
-				blogs
-					.sort( (a, b) => {
-						return b.likes - a.likes
-					})
-					.map(blog =>
-						<Blog
-							key={blog.id}
-							blog={blog}
-							increaseLike={increaseLike}
-							removeBlog={removeBlog}
-						/>
-					)
-			}
+			<div id='showBlog'>
+				{
+					blogs
+						.sort( (a, b) => {
+							return b.likes - a.likes
+						})
+						.map(blog =>
+							<Blog
+								key={blog.id}
+								blog={blog}
+								increaseLike={increaseLike}
+								removeBlog={removeBlog}
+							/>
+						)
+				}
+			</div>
+
 		</div>
 	)
 

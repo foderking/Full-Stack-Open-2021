@@ -30,7 +30,7 @@ describe('Blog app', function() {
 
 	describe('when logged in', function (){
 		const blog = {title: 'random title', author: 'random author', url: 'random url' }
-		
+	
 		beforeEach( function() {
 			cy.get('#Username').type('foking')
 			cy.get('#Password').type('random')
@@ -61,6 +61,79 @@ describe('Blog app', function() {
 			cy.contains('remove').click()
 
 			cy.should('not.contain', 'random title random author')
+		})
+
+
+	})
+
+	describe('checking ordering', function(){
+		const blog1 = {title: 'ritle', author: 'ahor', url: 'rurl' }
+		const blog2 = {title: 'ranle', author: 'rathor', url: 'asrl' }
+		const blog3 = {title: 'sdfke', author: 'aljfor', url: 'lsrl' }
+		
+		beforeEach(function () {
+			cy.get('#Username').type('foking')
+			cy.get('#Password').type('random')
+			cy.contains('login').click()
+			cy.contains('foking logged in successfully')	
+
+			cy.get('#Title').type(blog1.title)
+			cy.get('#Author').type(blog1.author)
+			cy.get('#Url').type(blog1.url)
+			cy.contains('create').click()
+
+			cy.contains(`${blog1.title} posted successfully`)
+			cy.contains('create blog').click()
+
+			cy.get('#Title').type(blog2.title)
+			cy.get('#Author').type(blog2.author)
+			cy.get('#Url').type(blog2.url)
+			cy.contains('create').click()
+
+			cy.contains('posted successfully')
+			cy.contains(`${blog2.title} posted successfully`)
+			cy.contains('create blog').click()
+
+			cy.get('#Title').type(blog3.title)
+			cy.get('#Author').type(blog3.author)
+			cy.get('#Url').type(blog3.url)
+			cy.contains('create').click()
+
+			cy.contains('posted successfully')
+			cy.contains(`${blog3.title} posted successfully`)
+
+			cy.contains(`${blog1.title} ${blog1.author}`).parent().contains('see more').click().parent().contains('like').click()
+			cy.contains(`${blog1.title} liked`)
+
+			cy.contains(`${blog3.title} ${blog3.author}`).parent().contains('see more').click().parent().contains('like').click()
+			cy.contains(`${blog3.title} liked`)
+
+			cy.contains(`${blog2.title} ${blog2.author}`).parent().contains('see more').click().parent().contains('like').click()
+			cy.contains(`${blog2.title} liked`)
+
+
+
+			for (let i = 0; i < 4; i++) {
+				cy.contains(`${blog3.url}`).parent().contains('like').click()
+				cy.contains(`${blog3.title} liked`)
+			}
+
+			for (let i = 0; i < 2; i++) {
+				cy.contains(`${blog2.url}`).parent().contains('like').click()
+				cy.contains(`${blog2.title} liked`)
+			}
+
+		})
+
+		it('according to likes', function() {
+			cy.get('#showBlog').find('span')
+				.then(resp => {
+					console.log(resp, 'sf')
+
+					expect(resp[0].innerText).to.equal('5')
+					expect(resp[1].innerText).to.equal('3')
+					expect(resp[2].innerText).to.equal('1')
+				})
 		})
 	})
 

@@ -39,8 +39,8 @@ const FullBlog = ({ blog, increaseLike }) =>
 		<div>{blog.author}</div>
 		<div>{blog.url}</div>
 		<div>
-      likes {blog.likes}
-			<button onClick={increaseLike}>like</button>
+      likes <span>{blog.likes}</span>
+			<button className='like' onClick={increaseLike}>like</button>
 		</div>
 	</div>
 
