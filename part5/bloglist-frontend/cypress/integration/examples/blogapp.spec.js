@@ -1,6 +1,8 @@
 describe('Blog app', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/reset')
+		const user = {username: 'foking', name:'king', password:'random' }
+    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+		cy.request('POST', 'http://localhost:3003/api/users/', user)
     cy.visit('http://localhost:3000')
   })
 	
@@ -9,10 +11,19 @@ describe('Blog app', function() {
 		cy.contains('Password')
 		cy.contains('login')
 	})
-  // it('front page can be opened', function() {
-	// 	cy.get('#Username').type('root')
-	// 	cy.get('#Password').type('sekret')
-  //   cy.contains('login').click()
-	// 	cy.contains('logged in successfully')	
-  // })
+
+	describe('Log in', function(){
+		it('success with correct credentials', function() {
+			cy.get('#Username').type('foking')
+			cy.get('#Password').type('random')
+			cy.contains('login').click()
+			cy.contains('foking logged in successfully')	
+		})
+		it('failure with wrong credentials', function() {
+			cy.get('#Username').type('fking')
+			cy.get('#Password').type('random')
+			cy.contains('login').click()
+			cy.get('.error').contains('invalid username or password')
+		})
+	})
 })
