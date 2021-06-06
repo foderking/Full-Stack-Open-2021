@@ -55,5 +55,13 @@ describe('Blog app', function() {
 			cy.contains('like').parent().find('button').click()
 			cy.contains('likes').parent().should('contain', 'likes 1')
 		})
+
+		it('blog deletion', function () {
+			cy.contains('see more').click()
+			cy.contains('remove').click()
+
+			cy.should('not.contain', 'random title random author')
+		})
 	})
+
 })
