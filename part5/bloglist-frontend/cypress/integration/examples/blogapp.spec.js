@@ -24,6 +24,7 @@ describe('Blog app', function() {
 			cy.get('#Password').type('random')
 			cy.contains('login').click()
 			cy.get('.error').contains('invalid username or password')
+			cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
 		})
 	})
 
@@ -35,16 +36,24 @@ describe('Blog app', function() {
 			cy.get('#Password').type('random')
 			cy.contains('login').click()
 			cy.contains('foking logged in successfully')	
-		})
 
-		it('a blog can be created', function (){
 			cy.get('#Title').type(blog.title)
 			cy.get('#Author').type(blog.author)
 			cy.get('#Url').type(blog.url)
 
 			cy.contains('create').click()
+		})
+
+		it('a blog can be created', function (){
 			cy.contains('random title posted successfully')
 			cy.contains('random title random author')
+		})
+
+		it('the like button works', function () {
+			cy.contains('see more').click()
+			cy.contains('likes').parent().should('contain', 'likes 0')
+			cy.contains('like').parent().find('button').click()
+			cy.contains('likes').parent().should('contain', 'likes 1')
 		})
 	})
 })
