@@ -26,6 +26,7 @@ export const addVote = (id, anecdotes) => {
     }
   }
 }
+
 export const createNote = content => 
   ({
     type:'NEW_NOTE',
@@ -36,12 +37,10 @@ export const createNote = content =>
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  // console.log('state now: ', state)
-  // console.log('action', action)
   if (action.type === 'NEW_NOTE') {
     return state.concat(asObject(action.data))
   }
-   if (action.type === 'VOTE') {
+  else if (action.type === 'VOTE') {
     return state.map(each => each.id === action.data.id ? action.data : each)
   }
   return state

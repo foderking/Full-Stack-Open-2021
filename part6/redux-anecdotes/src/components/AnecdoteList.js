@@ -4,9 +4,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addVote, createNote } from '../reducers/anecdoteReducer'
 
 
-
-
-
 const AnecdoteList = () =>
 {
 	const dispatch = useDispatch()
@@ -18,15 +15,16 @@ const AnecdoteList = () =>
       return 0
     })
   )
+
   const vote = (id) => {
     dispatch(addVote(id, anecdotes))
   }
 
-
 	return(
 		<div>
       <h2>anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {
+			anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -36,7 +34,8 @@ const AnecdoteList = () =>
             <button onClick={() => vote(anecdote.id)}>vote</button>
           </div>
         </div>
-      )}
+      )
+			}
 
 		</div>
 	)
