@@ -1,6 +1,3 @@
-const init = 'Welcome to the Application'
-
-
 export const newNotification = notif => {
 	return {
 		type: 'NOTIFY',
@@ -8,7 +5,7 @@ export const newNotification = notif => {
 	}
 }
 
-const notificationReducer = (state = init, action) =>
+const notificationReducer = (state = '', action) =>
 {
 	switch (action.type) {
 		case 'NOTIFY':
