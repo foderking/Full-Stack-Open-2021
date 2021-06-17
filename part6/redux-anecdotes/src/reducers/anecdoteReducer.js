@@ -17,6 +17,22 @@ const asObject = (anecdote) => {
   }
 }
 
+export const addVote = (id, anecdotes) => {
+  const note = anecdotes.find(each => each.id === id)
+  return {
+    type:'VOTE' ,
+    data:{
+    ...note, votes: note.votes+1
+    }
+  }
+}
+export const createNote = content => 
+  ({
+    type:'NEW_NOTE',
+    data: content
+  })
+
+
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
