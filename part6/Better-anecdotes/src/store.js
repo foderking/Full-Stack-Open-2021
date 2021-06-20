@@ -1,4 +1,3 @@
-import React from 'react'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import anecReducer from './reducers/anecdoteReducer'
 import notReducer from './reducers/notificationReducer'
@@ -16,6 +15,5 @@ const store = createStore(
 	reducer,
 	composeWithDevTools()
 )
-console.log(store.getState())
 
 export default store

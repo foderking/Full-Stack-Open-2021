@@ -3,7 +3,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
 import { newNotification } from '../reducers/notificationReducer'
-
+import store from '../store'
 
 const AnecdoteList = () =>
 {
@@ -13,7 +13,7 @@ const AnecdoteList = () =>
     state =>
       state.anecdote
         .filter(each => each.content.startsWith(state.filter))
-        .sort( (a, b) => {
+    	  .sort( (a, b) => {
           if (a.votes > b.votes) return -1;
           if (a.votes < b.votes) return 1;
           return 0

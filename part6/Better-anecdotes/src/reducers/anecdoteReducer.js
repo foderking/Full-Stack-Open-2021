@@ -1,21 +1,12 @@
-const anecdotesAtStart = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-]
+// const getId = () => (100000 * Math.random()).toFixed(0)
 
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
+// export const asObject = (id, anecdote) => {
+//   return {
+//     content: anecdote,
+//     id,
+//     votes: 0
+//   }
+// }
 
 export const addVote = (id, anecdotes) => {
   const note = anecdotes.find(each => each.id === id)
@@ -29,21 +20,26 @@ export const addVote = (id, anecdotes) => {
 
 export const createNote = content => 
   ({
-    type:'NEW_NOTE',
+    type:'APPEND',
     data: content
   })
 
+const reducer = (state = [], action) =>
+{
+	switch(action.type)
+	{
+		// case 'NEW_NOTE':
+		// 	return state.concat(asObject(action.data))
+		case 'VOTE':
+			return state.map(each => each.id === action.data.id ? action.data : each)
+		// case 'INIT':
+		// 	return state.concat(action.data)
+		case 'APPEND':
+			return state.concat(action.data)
 
-const initialState = anecdotesAtStart.map(asObject)
-
-const reducer = (state = initialState, action) => {
-  if (action.type === 'NEW_NOTE') {
-    return state.concat(asObject(action.data))
-  }
-  else if (action.type === 'VOTE') {
-    return state.map(each => each.id === action.data.id ? action.data : each)
-  }
-  return state
+		default:
+			return state
+	}
 }
 
 export default reducer
