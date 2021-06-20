@@ -12,5 +12,9 @@ const post = async (data) => {
   return response.data
 }
 
+const put = async (id, data) => {
+  const response = await axios.put(`${baseUrl}/${id}`, data)
+  return response.data
+}
 
-export default { getAll, post }
+export default { getAll, post, put }

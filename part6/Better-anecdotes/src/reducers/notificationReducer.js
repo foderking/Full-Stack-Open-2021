@@ -5,6 +5,13 @@ export const newNotification = notif => {
 	}
 }
 
+export const notify = (message, time) => {
+	return async dispatch => {
+		dispatch(newNotification(message))
+		setTimeout(() => dispatch(newNotification('')), time*1000)
+	}
+}
+
 const notificationReducer = (state = '', action) =>
 {
 	switch (action.type) {

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { addVote, createNote } from '../reducers/anecdoteReducer'
+import { addVote, createNote, addNotes } from '../reducers/anecdoteReducer'
 import server from '../services/anecdotes'
 
 
@@ -15,11 +15,8 @@ const AnecdoteForm = () =>
 		const content = event.target.note.value
 		event.target.note.value = ''
 		
-		const data =await  server.post({content,votes:0})//.then(data => {
+		dispatch(addNotes(content))
 
-		console.log(data)	
-	
-		dispatch(createNote(data))
 	}
 
 	return(

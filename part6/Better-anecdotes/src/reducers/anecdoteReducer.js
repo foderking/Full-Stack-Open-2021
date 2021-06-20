@@ -1,20 +1,17 @@
-// const getId = () => (100000 * Math.random()).toFixed(0)
+import server from '../services/anecdotes'
 
-// export const asObject = (id, anecdote) => {
-//   return {
-//     content: anecdote,
-//     id,
-//     votes: 0
-//   }
-// }
 
-export const addVote = (id, anecdotes) => {
-  const note = anecdotes.find(each => each.id === id)
-  return {
-    type:'VOTE' ,
-    data:{
-    ...note, votes: note.votes+1
+export const addVote = (data) => {
+	return async dispatch => {
+		data = {
+			...data, votes: data.votes+1
     }
+		const res  = await server.put(data.id, data)
+		
+		dispatch({
+			type: 'VOTE',
+			data: res
+		})
   }
 }
 
@@ -24,16 +21,26 @@ export const createNote = content =>
     data: content
   })
 
+export const initializeNotes = () => {
+	return async dispatch => {
+		const data = await server.getAll()
+		dispatch(createNote(data))
+	}
+}
+
+export const addNotes = (content) => {
+	return async dispatch => {
+		const data = await server.post({content,votes:0})
+		dispatch(createNote(data))
+	}
+}
+
 const reducer = (state = [], action) =>
 {
 	switch(action.type)
 	{
-		// case 'NEW_NOTE':
-		// 	return state.concat(asObject(action.data))
 		case 'VOTE':
 			return state.map(each => each.id === action.data.id ? action.data : each)
-		// case 'INIT':
-		// 	return state.concat(action.data)
 		case 'APPEND':
 			return state.concat(action.data)
 
