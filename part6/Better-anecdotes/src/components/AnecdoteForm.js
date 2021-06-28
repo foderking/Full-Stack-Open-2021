@@ -1,24 +1,18 @@
 import React from 'react'
-
-import { useSelector, useDispatch } from 'react-redux'
-import { addVote, createNote, addNotes } from '../reducers/anecdoteReducer'
-import server from '../services/anecdotes'
+import { addNotes } from '../reducers/anecdoteReducer'
+import { connect } from 'react-redux'
 
 
-
-const AnecdoteForm = () =>
+const AnecdoteForm = (props) =>
 {
-	const dispatch = useDispatch()
-
 	const addNote = async (event) => {
 		event.preventDefault()
+
 		const content = event.target.note.value
 		event.target.note.value = ''
 		
-		dispatch(addNotes(content))
-
+		props.addNotes(content)
 	}
-
 	return(
 		<div>
 			<h2>create new</h2>
@@ -30,4 +24,14 @@ const AnecdoteForm = () =>
 	)
 }
 
-export default AnecdoteForm
+
+const mapStatetoProps = (state) => 
+	({state: state})
+
+const mapDispatchToProps = {
+  addNotes
+}
+
+
+const Connected = connect(mapStatetoProps, mapDispatchToProps)(AnecdoteForm)
+export default Connected

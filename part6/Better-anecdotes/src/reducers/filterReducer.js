@@ -9,4 +9,9 @@ const filterReducer = (state  = '' , action) =>
 	}
 }
 
+export const filterHelper =	(value) =>	({
+			type: 'FILTER',
+			filter: value
+		})
+
 export default filterReducer
