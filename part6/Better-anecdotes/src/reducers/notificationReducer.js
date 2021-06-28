@@ -1,3 +1,5 @@
+let id
+
 export const newNotification = notif => {
 	return {
 		type: 'NOTIFY',
@@ -8,7 +10,8 @@ export const newNotification = notif => {
 export const notify = (message, time) => {
 	return async dispatch => {
 		dispatch(newNotification(message))
-		setTimeout(() => dispatch(newNotification('')), time*1000)
+		clearTimeout(id)
+		id = setTimeout(() => dispatch(newNotification('')), time*1000)
 	}
 }
 
