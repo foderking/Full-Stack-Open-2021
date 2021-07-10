@@ -3,6 +3,10 @@ import {
   BrowserRouter as Router,
   Switch, Route, Link, useHistory, useParams
 } from "react-router-dom"
+import { useField } from './hooks'
+
+
+
 
 
 const Menu = () => 
@@ -18,6 +22,7 @@ const Menu = () =>
     </div>
   )
 }
+
 
 const AnecdoteList = ({ anecdotes }) => 
 (
@@ -35,6 +40,7 @@ const AnecdoteList = ({ anecdotes }) =>
   </div>
 )
 
+
 const About = () => 
 (
   <div>
@@ -50,6 +56,7 @@ const About = () =>
   </div>
 )
 
+
 const Footer = () => 
 (
   <div>
@@ -59,13 +66,13 @@ const Footer = () =>
   </div>
 )
 
+
 const View = ({anecdotes}) => 
 {
   const id = useParams().id
   const anec = anecdotes.find( each => each.id === id )
   console.log(id, anec)
   
-  // return <div>asdfasf</div>
   return (
     <div>
       <h2>{anec.content} by {anec.author}</h2>
@@ -75,28 +82,41 @@ const View = ({anecdotes}) =>
   )
 }
 
+
 const CreateNew = (props) => 
 {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('content')
+  const author = useField('author')
+  const info = useField('info')
+
   const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.main.value,
+      author: author.main.value,
+      info: info.main.value,
       votes: 0
     })
+
     history.push('/')
+
     props.setNotification('')
-    props.setLast(content)
+    props.setLast(content.main.value)
+
     setTimeout( () => {
         props.setNotification('none')
       }, 10000
     )
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -105,22 +125,23 @@ const CreateNew = (props) =>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content.main} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author.main} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info.main} />
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
-
 }
+
 
 const App = () => 
 {
@@ -162,6 +183,7 @@ const App = () =>
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
+
   const notif = {
     display: notification
   }
