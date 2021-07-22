@@ -1,29 +1,29 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
 import InputComp from './InputComp'
 import { helper } from '../reducers/Reducer'
 import { useSelector, useDispatch } from 'react-redux'
 
-const CreateBlog = ({ handleBlogPost }) => {
+
+
+const CreateBlog = ({ handleBlogPost }) =>
+{
 	const dispatch = useDispatch()
 	const login = useSelector(state => state)
 
 	const blogTitle = login.title
 	const setTitle = (message) => dispatch(helper('title', message))
 
-	// const [blogAuthor, setAuthor] = useState('')
 	const blogAuthor = login.author
 	const setAuthor = (message) => dispatch(helper('author', message))
 
-	// const [blogUrl, setUrl] = useState('')
 	const blogUrl = login.url
 	const setUrl = (message) => dispatch(helper('url', message))
-
 
 
 	return (
 		<div>
 			<h2>Create Blog</h2>
+
 			<form onSubmit={handleBlogPost}>
 				<InputComp
 					desc='Title'
@@ -43,9 +43,9 @@ const CreateBlog = ({ handleBlogPost }) => {
 					value={blogUrl}
 					change={setUrl}
 				/>
-				<button type='submit'>create</button>
-			</form>
 
+				<button  className='btn btn-secondary' type='submit'>create</button>
+			</form>
 		</div>
 	)
 }

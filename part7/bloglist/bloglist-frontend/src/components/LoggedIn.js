@@ -3,7 +3,8 @@ import { helper } from '../reducers/Reducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-const LoggedIn = ({ notify }) => {
+const LoggedIn = ({ notify }) =>
+{
 	const dispatch = useDispatch()
 	const login = useSelector(state => state)
 
@@ -23,9 +24,9 @@ const LoggedIn = ({ notify }) => {
 
 
 	return (
-		<form onSubmit={handleLogout}>
-			{user? user.username : 'no one'} is logged in
-			<button type="submit" >logout</button>
+		<form onSubmit={handleLogout} className='d-flex'>
+			<span className='me-2 nav-link'>{user? user.username : 'no one'} is logged in</span>
+			<button className='btn btn-secondary' type="submit" >logout</button>
 		</form>
 	)
 }

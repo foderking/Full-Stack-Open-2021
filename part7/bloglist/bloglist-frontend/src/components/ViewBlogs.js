@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react'
-import blogService from '../services/blogs'
 import { helper } from '../reducers/Reducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useRouteMatch } from 'react-router-dom'
+import blogService from '../services/blogs'
 
-const ViewBlogs = () => {
+const ViewBlogs = () =>
+{
 	const dispatch = useDispatch()
 	const setBlogs = (message) => dispatch(helper('blogs', message))
 
 	const all = useSelector(state => state.blogs)
-
 	const url  = useRouteMatch().url
+
 
 	useEffect(async () => {
 		const blogs = await blogService.getAll()
@@ -23,6 +24,7 @@ const ViewBlogs = () => {
 	return (
 		<div>
 			<h2>Blogs</h2>
+
 			<ul>
 				{
 					all.map(each =>
@@ -34,6 +36,7 @@ const ViewBlogs = () => {
 					)
 				}
 			</ul>
+
 		</div>
 	)
 }

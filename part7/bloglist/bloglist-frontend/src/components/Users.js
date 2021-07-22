@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
-// import React from 'react'
 import blogService from '../services/blogs'
+import LoggedIn from './LoggedIn'
 import { useSelector, useDispatch } from 'react-redux'
 import { helper } from '../reducers/Reducer'
-import LoggedIn from './LoggedIn'
 import { Route, useParams, useRouteMatch } from 'react-router'
 import { Link } from 'react-router-dom'
 
@@ -12,11 +11,11 @@ const Users = ({ notify }) =>
 	const { path , url } = useRouteMatch()
 
 	const dispatch = useDispatch()
+
 	const allUser = useSelector(state => state.allUser)
 	const currentUser = useSelector(state => state.user).username
 
 	console.log(allUser)
-
 
 
 	useEffect(() => {
@@ -32,9 +31,11 @@ const Users = ({ notify }) =>
 		<div>
 			<h2>blogs</h2>
 			<LoggedIn notify={notify} />
+
 			<Route path={`${path}/:id`} >
 				<EachUser current={currentUser} allUser={allUser} />
 			</Route>
+
 			<Route exact path={`${path}`} >
 				<ShowInfo state={allUser} url={url} />
 			</Route>
@@ -45,8 +46,8 @@ const Users = ({ notify }) =>
 const EachUser = ({ current, allUser }) =>
 {
 	const  routeId  = useParams().id
-
 	const rnad = allUser.find(each => each.id === routeId  && each.username === current)
+
 	console.log(rnad, routeId)
 
 	if (!rnad) {
@@ -76,8 +77,8 @@ const ShowInfo =({ state, url }) =>
 {
 	return (
 		<div>
-
 			<h2>Users</h2>
+
 			<table>
 				<tbody>
 					<tr>

@@ -1,11 +1,13 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { helper } from '../reducers/Reducer'
 import InputComp from '../components/InputComp'
 import loginService from '../services/login'
+import { useSelector, useDispatch } from 'react-redux'
+import { helper } from '../reducers/Reducer'
 
-const Login = ({ notify }) => {
+const Login = ({ notify }) =>
+{
 	window.localStorage.setItem('activeUser', null)
+
 	const dispatch = useDispatch()
 	const login = useSelector(state => state)
 
@@ -21,7 +23,6 @@ const Login = ({ notify }) => {
 	function handleLogin(e)
 	{
 		e.preventDefault()
-		// console.log('hahahahahaahahha')
 
 		loginService
 			.login({
@@ -36,34 +37,41 @@ const Login = ({ notify }) => {
 				setUsername('')
 				setPassword('')
 			})
-
+			.catch(e =>
+				notify(e.response.data.error, 'error')
+			)
 	}
 
 	return (
-		<div>
-			<h2>Log in to application</h2>
+		<div className="container py-5 border-1 h-100 d-flex justify-content-center">
+			<div className="jumbotron my-auto">
+				<h1 className="display-3 py-3">Log in to application</h1>
 
-			<form onSubmit={handleLogin}>
-				<div>
-					<InputComp
-						desc='Username'
-						type='text'
-						value={username}
-						change={setUsername}
-					/>
+				<div className='d-flex justify-content-center' >
+					<form onSubmit={handleLogin}>
+						<div>
+							<InputComp
+								desc='Username'
+								type='text'
+								value={username}
+								change={setUsername}
+							/>
+						</div>
+
+						<div>
+							<InputComp
+								desc='Password'
+								type='password'
+								value={password}
+								change={setPassword}
+							/>
+						</div>
+
+						<button type="submit" className='btn btn-primary'>login</button>
+					</form>
+
 				</div>
-
-				<div>
-					<InputComp
-						desc='Password'
-						type='password'
-						value={password}
-						change={setPassword}
-					/>
-				</div>
-
-				<button type="submit">login</button>
-			</form>
+			</div>
 		</div>
 	)
 }

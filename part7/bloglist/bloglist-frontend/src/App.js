@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
-import { useSelector, useDispatch } from 'react-redux'
-import { helper } from './reducers/Reducer'
 import Login from './components/Login'
 import Blogs from './components/Blogs'
-import { Switch, Route } from 'react-router-dom'
 import Users from './components/Users'
 import AllBlog from './components/AllBlog'
 import ViewBlogs from './components/ViewBlogs'
+import { useSelector, useDispatch } from 'react-redux'
+import { helper } from './reducers/Reducer'
+import { Switch, Route } from 'react-router-dom'
 
 const App = () =>
 {
@@ -24,13 +24,11 @@ const App = () =>
 	const setType = (message) => dispatch(helper('class', message))
 
 
-
 	function notify (message, type)
 	{
 
 		setError(message)
 		setType(type)
-
 		setTimeout(() => setError(false), 4000 )
 	}
 
@@ -51,7 +49,6 @@ const App = () =>
 					? <Notification />
 					: <></>
 			}
-
 			<Switch>
 				<Route path='/user'>
 					{
@@ -77,7 +74,6 @@ const App = () =>
 					}
 				</Route>
 
-
 				<Route path='/'>
 					{
 						user === null
@@ -86,7 +82,6 @@ const App = () =>
 					}
 				</Route>
 			</Switch>
-
 
 		</div>
 	)

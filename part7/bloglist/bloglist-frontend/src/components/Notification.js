@@ -2,9 +2,9 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 
-const Notification = () => {
+const Notification = () =>
+{
 	const main = useSelector(state => state)
-
 	const error  = main.error
 	const classtype = main.class
 
@@ -13,7 +13,7 @@ const Notification = () => {
 	}
 
 	return (
-		<div className={classtype}>
+		<div className={`alert alert-${classtype === 'error' ? 'danger' : classtype}`}>
 			{error}
 		</div>
 	)
