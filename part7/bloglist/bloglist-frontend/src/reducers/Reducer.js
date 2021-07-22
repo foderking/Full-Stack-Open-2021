@@ -8,7 +8,8 @@ const init = {
 	title: '',
 	author: '',
 	url: '',
-	visibility: true
+	visibility: true,
+	allUser: []
 }
 
 export function helper (type, data)
@@ -48,6 +49,9 @@ function reducer (state=init , action)
 
 	case 'visibility':
 		return { ...state, visibility: action.data }
+
+	case 'allUser':
+		return { ...state, allUser: action.data }
 
 	default:
 		return state

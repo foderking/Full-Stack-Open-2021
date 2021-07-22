@@ -52,8 +52,14 @@ const App = () =>
 
 			<Switch>
 				<Route path='/user'>
-					<Users />
+					{
+						user === null
+							// ? Login({ notify })
+							? 'you need to login'
+							: <Users  notify={ notify } />
+					}
 				</Route>
+
 				<Route path='/'>
 					{
 						user === null

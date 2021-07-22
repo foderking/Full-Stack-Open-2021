@@ -1,19 +1,37 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
+// import React from 'react'
 import blogService from '../services/blogs'
+import { useSelector, useDispatch } from 'react-redux'
+import { helper } from '../reducers/Reducer'
+import LoggedIn from './LoggedIn'
 
-const Users = () => {
+const Users = ({ notify }) =>
+{
+	const dispatch = useDispatch()
+	const allUser = useSelector(state => state.allUser)
 
-	const [state, setstate] = useState([])
+
+	useEffect(() => {
+		blogService.getUsers()
+			.then(ech =>
+				dispatch(helper('allUser', ech.data))
+			)
+
+	}, [])
 
 
-	blogService.getUsers()
-		.then(each => setstate(each.data))
+	return (
+		<div>
+			<h2>blogs</h2>
+			<LoggedIn notify={notify} />
+			<ShowInfo state={allUser} />
+		</div>
+	)
+}
 
-	function gen()
-	{
-		Math.floor(Math.random() *  1000)
-	}
 
+const ShowInfo =({ state }) =>
+{
 	return (
 		<div>
 
@@ -21,13 +39,12 @@ const Users = () => {
 			<table>
 				<tbody>
 					<tr>
-						<td><h3>Username</h3></td>
-						<td><h3>blogs created</h3></td>
+						<th>Username</th>
+						<th>blogs created</th>
 					</tr>
-
 					{
 						state.map(each =>
-							<tr key={gen()} >
+							<tr key={each.id} >
 								<td>{each.username}</td>
 								<td>{each.blogs.length}</td>
 							</tr>

@@ -21,7 +21,7 @@ const Login = ({ notify }) => {
 	function handleLogin(e)
 	{
 		e.preventDefault()
-		console.log('hahahahahaahahha')
+		// console.log('hahahahahaahahha')
 
 		loginService
 			.login({
@@ -29,8 +29,8 @@ const Login = ({ notify }) => {
 			})
 			.then(data => {
 				notify(`${data.username} logged in successfully` , 'success')
-				console.log(data)
 				setUser(data)
+				console.log(data)
 
 				window.localStorage.setItem('activeUser', data.token)
 				setUsername('')
@@ -38,24 +38,6 @@ const Login = ({ notify }) => {
 			})
 
 	}
-	// const handleLogin = (event, username, password, setUser) => //, setUsername, setPassword) =>
-	// {
-	// 	event.preventDefault()
-	// 	console.log(event)
-
-
-	// 	loginService
-	// 		.login({
-	// 			username, password,
-	// 		})
-	// 		.catch(error => {
-	// 			// notify(exception, 'error')
-	// 			console.log(error)
-	// 		})
-
-
-	// }
-
 
 	return (
 		<div>

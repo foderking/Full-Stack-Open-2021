@@ -4,6 +4,8 @@ import CreateBlog from '../components/CreateBlog'
 import { useSelector, useDispatch } from 'react-redux'
 import { helper } from '../reducers/Reducer'
 import blogService from '../services/blogs'
+import LoggedIn from './LoggedIn'
+import { Link } from 'react-router-dom'
 
 const Blogs = ({ notify }) => {
 	const dispatch = useDispatch()
@@ -13,8 +15,6 @@ const Blogs = ({ notify }) => {
 	const blogs = login.blogs
 	const setBlogs = (message) => dispatch(helper('blogs', message))
 
-	const user = login.user
-	const setUser = (message) => dispatch(helper('user', message))
 
 	const blogTitle = login.title
 	const setTitle = (message) => dispatch(helper('title', message))
@@ -28,15 +28,6 @@ const Blogs = ({ notify }) => {
 	const createBlogVis = login.visibility
 	const setBlogVis = (message) => dispatch(helper('visibility', message))
 
-
-
-	const handleLogout = (event) =>
-	{
-		event.preventDefault()
-
-		notify('logged out successfully' , 'success')
-		setUser(null)
-	}
 
 
 
@@ -71,15 +62,12 @@ const Blogs = ({ notify }) => {
 
 	const showWhenVisible = { display: createBlogVis ? '' : 'none' }
 
-
 	return (
 		<div>
+			<Link to='/user'>users</Link>
 			<h2>blogs</h2>
 
-			<form onSubmit={handleLogout}>
-				{user.username} is logged in
-				<button type="submit" >logout</button>
-			</form>
+			<LoggedIn notify={ notify }/>
 
 			<div style={showWhenVisible}>
 				<CreateBlog handleBlogPost={handleBlogPost} />
