@@ -64,11 +64,22 @@ const Blogs = ({ notify }) => {
 
 	return (
 		<div>
-			<NavLink to='/user'>users</NavLink>
+			<nav>
+				<ul className='menu'>
+					<li >
+						<NavLink className='item' to='/user'>users</NavLink>
+					</li>
+					<li >
+						<NavLink className='item' to='/blog'>blog</NavLink>
+					</li>
+					<li>
+						<LoggedIn notify={ notify }/>
+					</li>
+				</ul>
+			</nav>
 
 			<h2>blogs</h2>
 
-			<LoggedIn notify={ notify }/>
 
 			<div style={showWhenVisible}>
 				<CreateBlog handleBlogPost={handleBlogPost} />

@@ -8,6 +8,7 @@ import Blogs from './components/Blogs'
 import { Switch, Route } from 'react-router-dom'
 import Users from './components/Users'
 import AllBlog from './components/AllBlog'
+import ViewBlogs from './components/ViewBlogs'
 
 const App = () =>
 {
@@ -57,6 +58,14 @@ const App = () =>
 						user === null
 							? 'you need to login'
 							: <Users  notify={ notify } />
+					}
+				</Route>
+
+				<Route path='/blog'>
+					{
+						user === null
+							? 'you need to login'
+							: <ViewBlogs />
 					}
 				</Route>
 

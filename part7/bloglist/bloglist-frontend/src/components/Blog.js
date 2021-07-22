@@ -1,46 +1,8 @@
-// import React, { useState } from 'react'
 import React from 'react'
-
-// import blogService from '../services/blogs'
-// import { helper } from '../reducers/Reducer'
-// import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 
-const Blog = ( { notify, blog }  ) => {
-	// const dispatch = useDispatch()
-	// const login = useSelector(state => state)
-
-	notify
-	// const blogs = login.blogs
-	// const setBlogs = (message) => dispatch(helper('blogs', message))
-
-	// const user = login.user
-	// const removeBlog = async(blog) =>
-	// {
-	// 	console.log(user.username, blog.user.username)
-
-	// 	if ( window.confirm(`Remove "${blog.title}" by ${blog.author}?`) && user.username === blog.user.username) {
-	// 		const id = blog.id
-
-	// 		await blogService.del(blog)
-
-	// 		const t = await blogService.getAll()
-	// 		setBlogs(t)
-	// 		console.log(id, 'removed')
-	// 		notify(`Blog created by ${user.username}`, 'success')
-	// 	}
-
-	// 	else {
-	// 		if (user.username !== blog.user.username) {
-	// 			notify(`Blog wasn't created by ${user.username}`, 'error')
-	// 		}
-
-	// 		console.log('blog wasn\'t deleted')
-	// 	}
-	// }
-
-
+const Blog = ( { blog }  ) => {
 	const blogStyle = {
 		paddingTop: 10,
 		paddingLeft: 2,
@@ -51,32 +13,13 @@ const Blog = ( { notify, blog }  ) => {
 
 	return (
 		<div style={blogStyle}>
-			<PartBlog blog={blog} />
-
-			{/* // <FullBlog blog={blog} increaseLike={() => increaseLike(blog)} /> */}
-			{/* <button onClick={() => setSee(!seePart)}>
-				{seePart ? 'see more' : 'see less'}
-			</button >
-			<button onClick={() => removeBlog(blog)}>
-        remove
-			</button> */}
+			<div className='partial'>
+				<Link to={`/blog/${blog.id}`} >
+					{blog.title}
+				</Link>
+			</div>
 		</div>
 	)
 }
-
-const PartBlog = ({ blog }) =>
-	<div className='partial'>
-		<Link to={`/blog/${blog.id}`} >
-			{blog.title}
-		</Link>
-		{/* {blog.author} */}
-	</div>
-
-// const FullBlog = ({ blog, increaseLike }) =>
-// 	<div className='full'>
-// 		<div>{blog.title}</div>
-// 		<div>{blog.author}</div>
-// 		<div>{blog.url}</div>
-// 	</div>
 
 export default Blog
