@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { helper } from '../reducers/Reducer'
 import blogService from '../services/blogs'
 import LoggedIn from './LoggedIn'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const Blogs = ({ notify }) => {
 	const dispatch = useDispatch()
@@ -64,7 +64,8 @@ const Blogs = ({ notify }) => {
 
 	return (
 		<div>
-			<Link to='/user'>users</Link>
+			<NavLink to='/user'>users</NavLink>
+
 			<h2>blogs</h2>
 
 			<LoggedIn notify={ notify }/>
