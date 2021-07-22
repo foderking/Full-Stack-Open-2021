@@ -50,6 +50,17 @@ const del = async blog => {
 	return response.data
 }
 
+async function postComment(id, comment)
+{
+	const data = {
+		content: comment
+	}
+
+	const url = `${baseUrl}/${id}/comments`
+	const response = await axios.post(url, data)
+	return response.data
+}
+
 async function getUsers()
 {
 	const url = '/api/users'
@@ -59,5 +70,5 @@ async function getUsers()
 
 }
 
-const exp = { getAll, post, setToken, update, del, getUsers }
+const exp = { getAll, post, setToken, update, del,postComment,  getUsers }
 export default exp

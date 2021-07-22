@@ -4,15 +4,19 @@ import { helper } from '../reducers/Reducer'
 import { useParams } from 'react-router-dom'
 import LoggedIn from './LoggedIn'
 import blogService from '../services/blogs'
+import InputComp from '../components/InputComp'
 
 const AllBlog = ({ notify }) => {
 	const id = useParams().id
 	const all = useSelector(state => state.blogs)
+	const comment  =  useSelector(state => state.comment)
 
 	const dispatch = useDispatch()
 
 
 	const setBlogs = (message) => dispatch(helper('blogs', message))
+	const setComment = (message) => dispatch(helper('comment', message))
+
 
 
 	const blog  = all.find( each => each.id === id)
@@ -37,6 +41,14 @@ const AllBlog = ({ notify }) => {
 		// notify(`${newBlog.title} liked` , 'success')
 	}
 
+	async function handleComment(e)
+	{
+		e.preventDefault()
+		await blogService.postComment(id, comment)
+		const t = await blogService.getAll()
+		setBlogs(t)
+		setComment('')
+	}
 
 
 	console.log(all , blog)
@@ -61,6 +73,18 @@ const AllBlog = ({ notify }) => {
 					)
 				}
 			</ul>
+			<form onSubmit={handleComment}>
+				<div>
+					<InputComp
+						type='text'
+						value={comment}
+						change={setComment}
+					/>
+					<button>
+						add comment
+					</button>
+				</div>
+			</form>
 		</div>
 	)
 }

@@ -8,6 +8,7 @@ const init = {
 	title: '',
 	author: '',
 	url: '',
+	comment: '',
 	visibility: true,
 	allUser: []
 }
@@ -46,6 +47,9 @@ function reducer (state=init , action)
 
 	case 'url':
 		return { ...state, url: action.data }
+
+	case 'comment':
+		return { ...state, comment: action.data }
 
 	case 'visibility':
 		return { ...state, visibility: action.data }
