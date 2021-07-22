@@ -8,6 +8,7 @@ const blog = require('../models/blog')
 
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
+const Comments = require('../models/comment')
 const jwt = require('jsonwebtoken')
 
 
@@ -30,6 +31,12 @@ describe('only valid blogs are created', () => {
     const user = new User({...helper.users.initial, passwordHash})
 
     await user.save()    
+
+
+    // Comment initialization
+    await Comments.deleteMany({})
+    const comment1 = new Comments(helper.comment.first)
+    comment1.save()
     
     // login user
     const result = await api

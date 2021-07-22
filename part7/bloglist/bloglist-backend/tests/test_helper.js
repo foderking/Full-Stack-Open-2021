@@ -45,6 +45,12 @@ const blogs = {
 	}
 }
 
+const comment = {
+	first: {
+		content: 'asdfasdf hahaha'
+	}
+}
+
 
 const users = {
 	initial: {
@@ -76,5 +82,6 @@ const users = {
 module.exports = { 
 	blogs,
 	getUser,
+	comment,
 	users
 }

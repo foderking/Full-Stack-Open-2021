@@ -46,13 +46,21 @@ const AllBlog = ({ notify }) => {
 			<LoggedIn notify={ notify } />
 
 			<h2>{blog.title}</h2>
-			<a href={`https://${blog.url}`}> {blog.url} </a>
-			{/* {blog.likes} */}
 			<div>
+				<a href={`https://${blog.url}`}> {blog.url} </a>
 				likes <span>{blog.likes}</span>
 				<button className='like' onClick={increaseLike}>like</button>
 			</div>
 			added by {blog.author}
+
+			<h3>comments</h3>
+			<ul>
+				{
+					blog.comments.map(
+						each => <li key={each.id}>{each.content}</li>
+					)
+				}
+			</ul>
 		</div>
 	)
 }

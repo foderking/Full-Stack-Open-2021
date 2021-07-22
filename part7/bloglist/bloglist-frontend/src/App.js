@@ -61,19 +61,19 @@ const App = () =>
 					}
 				</Route>
 
-				<Route path='/blog'>
-					{
-						user === null
-							? 'you need to login'
-							: <ViewBlogs />
-					}
-				</Route>
-
 				<Route path='/blog/:id'>
 					{
 						user === null
 							? 'you need to login'
 							:	<AllBlog notify={ notify } />
+					}
+				</Route>
+
+				<Route path='/blog'>
+					{
+						user === null
+							? 'you need to login'
+							: <ViewBlogs />
 					}
 				</Route>
 

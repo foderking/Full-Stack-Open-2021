@@ -1,6 +1,7 @@
 const server = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comments = require('../models/comment')
 const jwt = require('jsonwebtoken')
 
 
@@ -10,7 +11,7 @@ server.get('/', (request, response) => {
 })
 
 server.get('/api/blogs', async(request, response) => {
-  blogs = await Blog.find({}).populate('user', {username: 1, name:1, id:1})
+  blogs = await Blog.find({}).populate('user', {username: 1, name:1, id:1}).populate('comments')
   response.json(blogs)
 })
 
@@ -28,17 +29,8 @@ server.post('/api/blogs', async(request, response) => {
   response.status(201).json(result)
 })
 
-// // if (process.env.NODE_ENV === 'test') {
-// 	server.post('/reset', async (request, response) => {
-// 		// await Blog.deleteMany({})
-// 		// await User.deleteMany({})
-
-// 		response.status(204).end()
-// 	})
-// }
 
 server.delete('/api/blogs/:id', async(request, response) => {
-
   if (!request.token || !request.users.id) {
     return response.status(401).json({error: 'invalid token'})
   }
@@ -62,5 +54,24 @@ server.put('/api/blogs/:id', async(request, response, next) => {
   response.json(result.toJSON())
 })
 
+
+
+server.post('/api/blogs/:id/comments', async(request, response) => {
+  let comm = request.body
+  const id = request.params.id
+
+  const currBlog = await Blog.findById(id)
+
+  comment = new Comments({
+    ...comm,
+    blog: id
+  })
+  result = await comment.save()
+
+  currBlog.comments = currBlog.comments.concat(result.id)
+  console.log(result, currBlog)
+  await currBlog.save()
+  response.status(201).json(currBlog)
+})
 
 module.exports = server
