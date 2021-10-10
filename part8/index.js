@@ -1,5 +1,4 @@
 const { ApolloServer, UserInputError, gql } = require('apollo-server')
-const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const Author = require('./models/Author')
 const Books = require('./models/Books')
@@ -147,6 +146,10 @@ const typeDefs = gql`
 			name: String!
 			setBornTo: Int!
 		): Author
+		createAuthor(
+			name: String!
+			setBornTo: Int!
+		): Author
 
 		createUser(
 			username: String!
@@ -162,26 +165,39 @@ const typeDefs = gql`
 const resolvers = {
 	Query: {
 		bookCount: () => Books.collection.countDocuments(),//books.length,
+
 		authorCount: () => Author.collection.countDocuments(),//authors.length,
-		allBooks: (root, args) => {
-			let all = books
+
+		allBooks: async(root, args) => {
+
 			if (!args.author && !args.genre) {
-				return all
+				const ans = await Books.find({}).populate('author')// all
+				return ans
 			}
-			if (args.author) {
+
+			let all = books
+
+			if (!args.author ) {
+				// return await Books.find({})
 				all = all.filter(each => each.author === args.author)
 			}
 			if (args.genre) {
-				all = all.filter(each => each.genres.includes(args.genre))
+				const ans  = await Books.find({genres: {"$in": [args.genre]}}).populate('author')
+				// console.log(ans)
+				return ans
+				// all = all.filter(each => each.genres.includes(args.genre))
 			}
 			return all
 		},
-		allAuthors: () => authors,
+
+		allAuthors: async() => await Author.find({}),//.populate('Author'),//authors,
 		me: (root, args, context) => context.currentUser// User.collection.countDocuments()
 	},
+
 	Author: {
 		bookCount: (root) => books.filter(each => each.author === root.name).length
 	},
+
 	Mutation: {
 		createUser: (root, args) => {
 			try {
@@ -194,6 +210,18 @@ const resolvers = {
 				})
 			}
 		},
+		createAuthor: (root, args) => {
+			try {
+				const author = new Author({ ...args })
+				return author.save()
+			}
+			catch (error) {
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				})
+			}
+		},
+
 		login: async (root, args) => {
 			const user = await User.findOne({ username: args.username })
 
@@ -208,22 +236,20 @@ const resolvers = {
 
 			return { value: jwt.sign(userForToken, JWT_SECRET) }
 		},
-		editAuthor: async (root, args, context) => {
+
+		editAuthor: async (root, args, context) =>
+		{
 			if (!context) {
 				return null
 			}
 			try {
-				// const author = authors.find(each => each.name === args.name)
 				const author = await Author.findOne({ name: args.name })
-
 
 				if (!author) {
 					return null
 				}
 
-				// const updated = { ...author, born: args.setBornTo }
 				author.born = args.setBornTo
-				// authors = authors.map(each => each.name === args.name ? updated : each)
 				return author.save()
 			}
 			catch (error) {
@@ -231,23 +257,21 @@ const resolvers = {
 					invalidArgs: args,
 				})
 			}
-			// return updated
 		},
-		addBook: (root, args, context) => {
+
+		addBook: async (root, args, context) =>
+		{
 			if (!context) {
 				return null
 			}
 			try {
-				// const book = { ...args, id: uuid() }
 				const book = new Books({ ...args })
-				return book.save()
-				// books = books.concat(book)
-				// return book
+				await book.save()
+				const ans = await Books.findOne({title:args.title}).populate('author')
+				return ans
 			}
 			catch (error) {
-				throw new UserInputError(error.message, {
-					invalidArgs: args,
-				})
+				throw new UserInputError(error.message)
 			}
 		}
 	}
