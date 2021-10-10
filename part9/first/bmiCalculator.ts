@@ -1,9 +1,9 @@
 
-function calculateBmi(height_cm: number, weight_kg: number): string {
+export default function calculateBmi(height_cm: number, weight_kg: number): string {
 	const bmi =  weight_kg / (height_cm/100)**2
 
 	if (!Number(height_cm) || !Number(weight_kg) ) {
-		throw "User Input Error"
+		return "Error"
 	}
 
 	if (bmi < 16  ) return "Underweight (Severe thinness)"
@@ -14,8 +14,10 @@ function calculateBmi(height_cm: number, weight_kg: number): string {
 	if (bmi < 35  ) return "Obese (Class I)"
 	if (bmi < 40  ) return "Obese (Class II)"
 	if (bmi >=40  ) return "Obese (Class III)"
+
+	return "Error"
 }
 
-const a: number = Number(process.argv[2])
-const b: number = Number(process.argv[3])
-console.log(calculateBmi(a, b))
+// const a: number = Number(process.argv[2])
+// const b: number = Number(process.argv[3])
+// console.log(calculateBmi(a, b))
