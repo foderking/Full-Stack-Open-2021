@@ -6,6 +6,8 @@ const User = require('./models/User')
 const jwt = require('jsonwebtoken')
 const MONGODB_URI = 'mongodb+srv://foder:king@gql.quotp.mongodb.net/grapgql?retryWrites=true&w=majority'
 const JWT_SECRET = 'fw893ra9fy'
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 console.log('connecting to', MONGODB_URI)
 
@@ -106,6 +108,9 @@ let books = [
 ]
 
 const typeDefs = gql`
+	type Subscription {
+		bookAdded: Book!
+	}    
 	type Book {
 		title: String!
 		published: Int
@@ -268,13 +273,19 @@ const resolvers = {
 				const book = new Books({ ...args })
 				await book.save()
 				const ans = await Books.findOne({title:args.title}).populate('author')
+				pubsub.publish('BOOK_ADDED', { bookAdded: book })
 				return ans
 			}
 			catch (error) {
 				throw new UserInputError(error.message)
 			}
-		}
-	}
+		},
+	},
+	Subscription: {   
+		bookAdded: {     
+			subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])   
+		}, 
+	},
 }
 
 const server = new ApolloServer({
@@ -290,6 +301,7 @@ const server = new ApolloServer({
 	}
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
 	console.log(`Server ready at ${url}`)
+	console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
