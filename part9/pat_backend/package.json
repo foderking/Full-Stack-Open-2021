@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "ts-node-dev index.ts",
     "lint": "eslint --ext .ts",
-    "start" : "node build/index.js",
+    "start": "node build/index.js",
     "tsc": "tsc"
   },
   "dependencies": {
@@ -10,5 +10,6 @@
     "express": "^4.17.1",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.4"
-  }
+  },
+  "devDependencies": {}
 }

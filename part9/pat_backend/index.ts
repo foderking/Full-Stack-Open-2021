@@ -1,10 +1,21 @@
 import express from 'express';
 const app = express();
+import DiagnosesRouter from './src/routes/diagnoses'
+import PatientsRouter from  './src/routes/patients'
+
+const PORT : number = 3001;
+
 app.use(express.json());
+app.use(function (_req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+})
 
-const PORT = 3000;
+app.use('/api/diagnoses', DiagnosesRouter)
+app.use('/api/patients', PatientsRouter)
 
-app.get('/ping', (_req, res) => {
+app.get('/api/ping', (_req, res) => {
   console.log('someone pinged here');
   res.send('pong');
 });

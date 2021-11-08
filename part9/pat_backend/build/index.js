@@ -5,9 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
+const diagnoses_1 = __importDefault(require("./src/routes/diagnoses"));
+const patients_1 = __importDefault(require("./src/routes/patients"));
+const PORT = 3001;
 app.use(express_1.default.json());
-const PORT = 3000;
-app.get('/ping', (_req, res) => {
+app.use(function (_req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+app.use('/api/diagnoses', diagnoses_1.default);
+app.use('/api/patients', patients_1.default);
+app.get('/api/ping', (_req, res) => {
     console.log('someone pinged here');
     res.send('pong');
 });
