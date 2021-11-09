@@ -10,6 +10,11 @@ const router = express_1.default.Router();
 router.get('/', (_req, res) => {
     res.send((0, patients_1.GetPatientsSafe)());
 });
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    res.send((0, patients_1.GetByID)(id));
+    // res.send( GetPatientsSafe() )
+});
 router.post('/', (req, res) => {
     try {
         const new_diary_entry = (0, Utils_1.ToPatientEntry)(req.body);

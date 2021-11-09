@@ -18,7 +18,8 @@ export function ToPatientEntry({ name, dateOfBirth, ssn, gender, occupation }: F
 		dateOfBirth: ParseDOB(dateOfBirth),
 		ssn: ParseSSN(ssn),
 		gender: ParseGender(gender),
-		occupation: ParseOccu(occupation)
+		occupation: ParseOccu(occupation),
+		entries: []
 	}
 
 	return newentry

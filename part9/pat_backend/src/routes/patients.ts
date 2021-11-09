@@ -1,4 +1,4 @@
-import { GetPatientsSafe, CreateDiaryEntry } from '../services/patients'
+import { GetPatientsSafe, CreateDiaryEntry, GetByID } from '../services/patients'
 import { ToPatientEntry } from '../Utils'
 
 import express from 'express'
@@ -6,6 +6,12 @@ const router  = express.Router()
 
 router.get('/', (_req, res) => {
 	res.send( GetPatientsSafe() )
+})
+
+router.get('/:id', (req, res) => {
+	const id = req.params.id
+	res.send( GetByID(id) )
+	// res.send( GetPatientsSafe() )
 })
 
 router.post('/', (req, res) => {
