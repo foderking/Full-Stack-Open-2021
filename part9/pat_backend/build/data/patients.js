@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const patients = [
+const Utils_1 = require("../src/Utils");
+// const patients : PatientEntry[] = [
+const data = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
         "name": "John McClane",
@@ -42,4 +44,9 @@ const patients = [
         "occupation": "Digital evangelist"
     }
 ];
+const patients = data.map(obj => {
+    const object = (0, Utils_1.ToPatientEntry)(obj);
+    object.id = obj.id;
+    return object;
+});
 exports.default = patients;

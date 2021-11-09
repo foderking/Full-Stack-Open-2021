@@ -9,7 +9,13 @@ export interface PatientEntry {
 	name: string
 	dateOfBirth: string
 	ssn: string
-	gender: string
+	gender: Gender
 	occupation: string
 }
 
+export type PatientEntrySafe  = Omit<PatientEntry , 'ssn'>
+
+export enum Gender {
+	'male',
+	'female'
+}
