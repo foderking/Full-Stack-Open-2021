@@ -8,7 +8,7 @@ const Utils_1 = require("../Utils");
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 router.get('/', (_req, res) => {
-    res.send((0, patients_1.GetPatientsSafe)());
+    res.send((0, patients_1.GetPatients)());
 });
 router.get('/:id', (req, res) => {
     const id = req.params.id;

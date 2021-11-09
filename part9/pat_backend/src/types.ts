@@ -11,7 +11,7 @@ export interface PatientEntry {
 	ssn: string
 	gender: Gender
 	occupation: string
-	entries: []
+	entries: Entry[]
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Entry {
