@@ -3,26 +3,17 @@ import { useParams } from "react-router";
 import { useStateValue } from '../state';
 import { Icon, Card, SemanticICONS } from 'semantic-ui-react';
 import { Patient } from "../types";
-// import { Diagnosis, Patient } from "../types";
 import { Entry } from "../types";
 
 const Information = () =>
 {
 	const [{ patients }] = useStateValue();
-	// const [{ patients, diagnoses }] = useStateValue();
-	// const [{ diagnoses }] = useStateValue();
 	const { id } = useParams<{ id: string }>();
 
 	const patient = Object.values(patients).find(
 		(patient: Patient) => patient.id === id
 	);
 
-	// function GetDiag(code: string): Diagnosis['name']
-	// {
-	// 	const diag = Object.values(diagnoses).find( (each: Diagnosis) => each.code === code);
-	// 	console.log(diagnoses);
-	// 	return diag ? diag.name : 'undefined';
-	// }
 
 	let iconName: 'man' | 'woman' | 'genderless';
 
@@ -53,22 +44,11 @@ const Information = () =>
 			<p>ssn: {patient.ssn}</p>
 			<p>occupation: {patient.occupation}</p>
 			<h3>entries</h3>
-			{patient.entries.map(each =>
-				<EntryDetail key={each.id} entry={each} symbol={ GetSymbol(each.type)}/>
-				// <div key={each.id} >
-				// 	{each.date}		{each.description}
-				// 	<ul>
-				// 		{
-				// 			each.diagnosisCodes ?
-				// 				each.diagnosisCodes.map(each => 
-				// 					<li key={each}>{each} { GetDiag(each) }</li>
-				// 				)
-				// 				:
-				// 				''
-				// 		}
-				// 	</ul>
-				// </div>
-			)}
+			{
+				patient.entries.map(each =>
+					<EntryDetail key={each.id} entry={each} symbol={ GetSymbol(each.type)}/>
+				)
+			}
 		</div>
 	);
 };
