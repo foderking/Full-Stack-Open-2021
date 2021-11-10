@@ -64,6 +64,22 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
 	}
 }
 
+export interface EntryForm extends BaseEntry {
+  type: string;
+  healthCheckRating?: HealthCheckRating;
+  dischargeDate?: string;
+  dischargeCriteria?: string;
+  employerName?: string;
+  sickLeaveStartDate?: string;
+  sickLeaveEndDate?: string;
+}
+
+export enum EntryType {
+  "HealthCheck" = 'HealthCheck',
+  "Hospital" = "Hospital",
+  "OccupationalHealthcare" = "OccupationalHealthcare"
+}
+
 
 export type Entry =
   | HospitalEntry
