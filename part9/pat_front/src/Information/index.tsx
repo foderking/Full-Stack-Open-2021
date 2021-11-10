@@ -1,12 +1,15 @@
 import React from "react";
 import { useParams } from "react-router";
 import { useStateValue } from '../state';
-import { Icon } from 'semantic-ui-react';
-import { Diagnosis, Patient } from "../types";
+import { Icon, Card, SemanticICONS } from 'semantic-ui-react';
+import { Patient } from "../types";
+// import { Diagnosis, Patient } from "../types";
+import { Entry } from "../types";
 
 const Information = () =>
 {
-	const [{ patients, diagnoses }] = useStateValue();
+	const [{ patients }] = useStateValue();
+	// const [{ patients, diagnoses }] = useStateValue();
 	// const [{ diagnoses }] = useStateValue();
 	const { id } = useParams<{ id: string }>();
 
@@ -14,12 +17,12 @@ const Information = () =>
 		(patient: Patient) => patient.id === id
 	);
 
-	function GetDiag(code: string): Diagnosis['name']
-	{
-		const diag = Object.values(diagnoses).find( (each: Diagnosis) => each.code === code);
-		console.log(diagnoses);
-		return diag ? diag.name : 'undefined';
-	}
+	// function GetDiag(code: string): Diagnosis['name']
+	// {
+	// 	const diag = Object.values(diagnoses).find( (each: Diagnosis) => each.code === code);
+	// 	console.log(diagnoses);
+	// 	return diag ? diag.name : 'undefined';
+	// }
 
 	let iconName: 'man' | 'woman' | 'genderless';
 
@@ -51,20 +54,49 @@ const Information = () =>
 			<p>occupation: {patient.occupation}</p>
 			<h3>entries</h3>
 			{patient.entries.map(each =>
-				<div key={each.id} >
-					{each.date}		{each.description}
-					<ul>
-						{
-							each.diagnosisCodes ?
-								each.diagnosisCodes.map(each => 
-									<li key={each}>{each} { GetDiag(each) }</li>
-								)
-								:
-								''
-						}
-					</ul>
-				</div>
+				<EntryDetail key={each.id} entry={each} symbol={ GetSymbol(each.type)}/>
+				// <div key={each.id} >
+				// 	{each.date}		{each.description}
+				// 	<ul>
+				// 		{
+				// 			each.diagnosisCodes ?
+				// 				each.diagnosisCodes.map(each => 
+				// 					<li key={each}>{each} { GetDiag(each) }</li>
+				// 				)
+				// 				:
+				// 				''
+				// 		}
+				// 	</ul>
+				// </div>
 			)}
+		</div>
+	);
+};
+
+function GetSymbol(type: Entry['type']): SemanticICONS
+{
+	switch (type) {
+		case 'HealthCheck':
+			return 'hospital symbol';
+		case 'Hospital':
+			return 'user doctor';
+		case 'OccupationalHealthcare':
+			return 'user doctor';
+	}
+}
+
+const EntryDetail: React.FC<{ entry: Entry, symbol: SemanticICONS }> = ({entry, symbol}) =>
+{
+	const style = { margin: 10};
+
+	return (
+		<div>
+			<Card style={style}>
+				<Card.Content>
+					{entry.date} <Icon name={symbol} />
+				</Card.Content>
+				<Card.Content description={entry.description} />
+			</Card>
 		</div>
 	);
 };
