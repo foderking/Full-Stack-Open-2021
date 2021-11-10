@@ -1,3 +1,10 @@
+export enum HealthCheckRating {
+  "Healthy" = 0,
+  "LowRisk" = 1,
+  "HighRisk" = 2,
+  "CriticalRisk" = 3
+}
+
 export interface DiagEntry {
 	code: string
 	name: string
@@ -14,8 +21,41 @@ export interface PatientEntry {
 	entries: Entry[]
 }
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Entry {
+export interface BaseEntry {
+	id: string;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<DiagEntry['code']>;
 }
+
+export interface HealthCheckEntry extends BaseEntry {
+  type: "HealthCheck";
+  healthCheckRating: HealthCheckRating;
+}
+
+export interface HospitalEntry extends BaseEntry {
+	type: 'Hospital';
+	discharge: {
+		date: string;
+		criteria: string;
+	}
+}
+
+export interface OccupationalHealthcareEntry extends BaseEntry {
+	type: 'OccupationalHealthcare';
+	employerName: string;
+	sickLeave?: {
+		startDate: string;
+		endDate: string;
+	}
+}
+
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
 
 export type PublicPatient = Omit<PatientEntry, 'ssn' | 'entries' >
 
@@ -23,6 +63,6 @@ export type PublicPatient = Omit<PatientEntry, 'ssn' | 'entries' >
 export type PatientEntrySafe  = Omit<PatientEntry , 'ssn'>
 
 export enum Gender {
-	'male',
-	'female'
+	'Male',
+	'Female'
 }
