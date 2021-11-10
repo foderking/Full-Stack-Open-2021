@@ -1,7 +1,8 @@
-import { CreateDiaryEntry, GetByID, GetPatients } from '../services/patients'
-import { ToPatientEntry } from '../Utils'
+import { addEntry, CreateDiaryEntry, GetByID, GetPatients } from '../services/patients'
+import { ToPatientEntry, ToNewEntry } from '../Utils'
 
 import express from 'express'
+import { Entry } from '../types'
 const router  = express.Router()
 
 router.get('/', (_req, res) => {
@@ -30,5 +31,18 @@ router.post('/', (req, res) => {
     res.status(400).send(errorMessage);
 	}
 })
+
+router.post('/:id/entries', (req, res) => {
+  const { id } = req.params;
+  try {
+    const newEntry: Entry = ToNewEntry(req.body);
+
+    const addedEntry = addEntry(id, newEntry);
+    res.json(addedEntry);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Undefined error';
+    res.status(400).send(errorMessage);
+  }
+});
 
 export default router

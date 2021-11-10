@@ -29,4 +29,16 @@ router.post('/', (req, res) => {
         res.status(400).send(errorMessage);
     }
 });
+router.post('/:id/entries', (req, res) => {
+    const { id } = req.params;
+    try {
+        const newEntry = (0, Utils_1.ToNewEntry)(req.body);
+        const addedEntry = (0, patients_1.addEntry)(id, newEntry);
+        res.json(addedEntry);
+    }
+    catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Undefined error';
+        res.status(400).send(errorMessage);
+    }
+});
 exports.default = router;

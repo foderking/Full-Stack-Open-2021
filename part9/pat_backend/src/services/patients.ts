@@ -1,4 +1,4 @@
-import { PatientEntry, PatientEntrySafe, PublicPatient } from "../types";
+import { Entry, PatientEntry, PatientEntrySafe, PublicPatient } from "../types";
 import patients from "../../data/patients";
 
 export function GetPatients () : PatientEntry[] {
@@ -31,3 +31,15 @@ export function CreateDiaryEntry({id, name, dateOfBirth, ssn, gender, occupation
 	patients.push(new_entry)
 	return new_entry
 }
+
+export const addEntry = (patientId: string, entry: Entry): Entry => {
+
+  const patient: PatientEntry | undefined = GetByID(patientId);
+  if (!patient) {
+    throw new Error(`Incorrect patient id`);
+  }
+
+  patient.entries.push(entry);
+
+  return entry;
+};
